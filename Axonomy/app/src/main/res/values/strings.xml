@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Axonomy</string>
+
+    <string-array name="country_code">
+        <item>0086</item>
+        <item>00852</item>
+        <item>00853</item>
+        <item>00886</item>
+    </string-array>
+</resources>
