@@ -79,37 +79,41 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:background="#A7A4B6" />
+
             <EditText
+                android:id="@+id/mobileNumber"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:paddingLeft="5dp"
                 android:background="@android:color/transparent"
-                android:inputType="phone"
                 android:hint="Your Mobile Number"
-                android:textSize="15sp"
-                android:maxLines="1"/>
+                android:inputType="phone"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:textSize="15sp" />
         </LinearLayout>
 
         <EditText
+            android:id="@+id/pwd"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/rounded_layout"
-            android:inputType="textPassword"
             android:hint="Your Password"
-            android:textSize="15sp"
+            android:inputType="textPassword"
+            android:maxLines="1"
             android:paddingLeft="15dp"
-            android:maxLines="1"/>
+            android:textSize="15sp" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/purple_round_button"
+            android:onClick="login"
             android:text="LOGIN AXONOMY"
             android:textColor="#ffffffff"
-            android:textSize="17sp"/>
+            android:textSize="17sp" />
 
     </LinearLayout>
 
