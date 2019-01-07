@@ -1,7 +1,9 @@
 package pro.axonomy.www;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -31,6 +33,7 @@ public class LoginActivity extends Activity {
         userAgreementTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     public void login(View view) throws JSONException {
         final EditText mobileNumberText = (EditText) findViewById(R.id.mobileNumber);
         final String mobileNumber = mobileNumberText.getText().toString();

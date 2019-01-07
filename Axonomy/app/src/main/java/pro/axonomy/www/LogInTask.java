@@ -1,6 +1,9 @@
 package pro.axonomy.www;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -17,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
+@RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
 public class LogInTask extends AsyncTask<String, String, String> {
 
     public static final String LOGIN_URL = "https://wx.aceport.com/public/user/login";
