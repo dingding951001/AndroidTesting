@@ -1,4 +1,4 @@
-package pro.axonomy.www;
+package pro.axonomy.www.login;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
@@ -19,6 +19,8 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+
+import pro.axonomy.www.PostHttpsRequestTask;
 
 @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
 public class LogInTask extends AsyncTask<String, String, String> {
