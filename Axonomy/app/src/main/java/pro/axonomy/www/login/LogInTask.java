@@ -1,6 +1,7 @@
 package pro.axonomy.www.login;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -33,7 +34,6 @@ public class LogInTask extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
-
 
         SSLContext sc;
         HttpsURLConnection connection = null;

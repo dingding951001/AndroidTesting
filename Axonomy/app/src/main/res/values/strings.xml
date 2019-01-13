@@ -8,4 +8,8 @@
         <item>00853</item>
         <item>00886</item>
     </string-array>
+    <string name="title_activity_buttom_navigation">ButtomNavigationActivity</string>
+    <string name="title_vote">VOTE</string>
+    <string name="title_project">PROJECT</string>
+    <string name="title_me">ME</string>
 </resources>

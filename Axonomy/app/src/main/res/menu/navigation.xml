@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_vote"
+        android:icon="@mipmap/vote_normal"
+        android:title="@string/title_vote" />
+
+    <item
+        android:id="@+id/navigation_project"
+        android:icon="@mipmap/project_normal"
+        android:title="@string/title_project" />
+
+    <item
+        android:id="@+id/navigation_me"
+        android:icon="@mipmap/me_normal"
+        android:title="@string/title_me" />
+
+</menu>

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pro.axonomy.www">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
@@ -18,7 +20,9 @@
         </activity>
         <activity android:name=".login.MobileLoginActivity" />
         <activity android:name=".login.EmailLoginActivity" />
+        <activity
+            android:name=".ButtomNavigationActivity"
+            android:label="@string/title_activity_buttom_navigation"></activity>
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
