@@ -20,7 +20,7 @@ public class StartUpPageActivity extends Activity {
         handler.postDelayed(new Runnable() {
             public void run() {
                 finish();
-                Intent mobileLoginActivity = new Intent(getBaseContext(), ButtomNavigationActivity.class);
+                Intent mobileLoginActivity = new Intent(getBaseContext(), MobileLoginActivity.class);
                 startActivity(mobileLoginActivity);
             }
         }, 2000);

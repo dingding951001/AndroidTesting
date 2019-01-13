@@ -3,10 +3,18 @@
     <string name="user_agreement_en"><a href="https://img.aceport.com/User_Service_Protocol_File_en.pdf">User Service Protocol</a></string>
 
     <string-array name="country_code">
-        <item>0086</item>
-        <item>00852</item>
-        <item>00853</item>
-        <item>00886</item>
+        <item>China  0086</item>
+        <item>Hong Kong  00852</item>
+        <item>Macao  00853</item>
+        <item>Taiwan  00886</item>
+        <item>Singapore  0065</item>
+        <item>Argentina  0054</item>
+        <item>Korea  0082</item>
+        <item>Philippines  0063</item>
+        <item>France  0033</item>
+        <item>Russia  007</item>
+        <item>Germany  0049</item>
+        <item>Denmark  0045</item>
     </string-array>
     <string name="title_activity_buttom_navigation">ButtomNavigationActivity</string>
     <string name="title_vote">VOTE</string>
