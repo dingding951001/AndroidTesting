@@ -3,3 +3,4 @@
 Axonomy/build/
 Axonomy/.*
 local.properties
+.idea*

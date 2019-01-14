@@ -18,12 +18,12 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pro.axonomy.www.ButtomNavigationActivity;
 import pro.axonomy.www.R;
 
 public class MobileLoginActivity extends Activity {
 
-    public static final String LOGIN_TARGET = "target";
-    public static final String LOGIN_PASSWORD = "password";
+    private String fp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,29 +53,14 @@ public class MobileLoginActivity extends Activity {
         userAgreementTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-    public void login(View view) throws JSONException {
-        final EditText mobileNumberText = (EditText) findViewById(R.id.mobileNumber);
-        final String mobileNumber = mobileNumberText.getText().toString();
-        final EditText pwdText = (EditText) findViewById(R.id.mobile_pwd);
-        final String pwd = pwdText.getText().toString();
-
-        final JSONObject requestBody = new JSONObject() {{
-            put(LOGIN_TARGET, mobileNumber);
-            put(LOGIN_PASSWORD, pwd);
-        }};
-
-        new LogInTask().execute(requestBody.toString());
-    }
-
-    public void emailLogin(View view) {
+    public void switchToEmailLogin(View view) {
         Intent emailPasswordLoginIntent = new Intent(this, EmailLoginActivity.class);
         this.startActivity(emailPasswordLoginIntent);
     }
 
     public void switchPasswordAndSMS(View view) {
         final TextView mobileAuthorizationMethod = (TextView) findViewById(R.id.mobileAuthorizationMethod);
-        final EditText pwdText = (EditText) findViewById(R.id.mobile_pwd);
+        final EditText pwdText = (EditText) findViewById(R.id.mobilePassword);
         final LinearLayout smsLayout = (LinearLayout) findViewById(R.id.mobile_sms);
         if (mobileAuthorizationMethod.getText().toString().equals("SMS Code")) {
             pwdText.setVisibility(View.GONE);
@@ -92,5 +77,57 @@ public class MobileLoginActivity extends Activity {
             params.setMargins(480, 0, 0, 0);
             mobileAuthorizationMethod.setLayoutParams(params);
         }
+    }
+
+    public void sendSMSToPhone(View view) throws JSONException {
+        final EditText mobileNumberText = (EditText) findViewById(R.id.mobileNumber);
+        final String mobileNumber = mobileNumberText.getText().toString();
+        // TODO: extract the area code
+
+        final JSONObject requestBody = new JSONObject() {{
+            put(LogInTask.LOGIN_SMS_TYPE, 1);
+            put(LogInTask.LOGIN_TARGET, mobileNumber);
+        }};
+
+        new SMSTask(this).execute(requestBody.toString());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+    public void login(View view) throws JSONException {
+        final EditText mobileNumberText = (EditText) findViewById(R.id.mobileNumber);
+        final String mobileNumber = mobileNumberText.getText().toString();
+        final Spinner areaCodeSpinner = (Spinner) findViewById(R.id.country_code_spinner);
+        final String areadCode = areaCodeSpinner.getSelectedItem().toString().replaceAll("\\D+","");
+        Log.i("MobileActivity" ,"Extracted Country Code: " + areadCode);
+
+        final LinearLayout smsLayout = (LinearLayout) findViewById(R.id.mobile_sms);
+        final EditText pwdText = (EditText) findViewById(R.id.mobilePassword);
+
+        if (pwdText.getVisibility() == View.VISIBLE) {
+            final String pwd = pwdText.getText().toString();
+
+            final JSONObject requestBody = new JSONObject() {{
+                put(LogInTask.LOGIN_TARGET, mobileNumber);
+                put(LogInTask.LOGIN_PASSWORD, pwd);
+            }};
+
+            new LogInTask(this).execute(requestBody.toString(), "0");
+
+        } else if (smsLayout.getVisibility() == View.VISIBLE) {
+            final EditText verificationCodeText = (EditText) findViewById(R.id.phone_verification);
+            final String verificationCode = verificationCodeText.getText().toString();
+
+            final JSONObject requestBody = new JSONObject() {{
+                    put(LogInTask.VERIFICATION_CODE, verificationCode);
+                    put(LogInTask.FINGERPRINT, fp);
+                    put(LogInTask.REGISTRATION_FLAG, 1);
+            }};
+
+            new LogInTask(this).execute(requestBody.toString(), "1");
+        }
+    }
+
+    public void setFp(String fingerprint) {
+        this.fp = fingerprint;
     }
 }

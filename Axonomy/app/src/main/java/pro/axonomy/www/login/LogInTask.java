@@ -1,6 +1,6 @@
 package pro.axonomy.www.login;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,16 +21,37 @@ import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
+import pro.axonomy.www.ButtomNavigationActivity;
 import pro.axonomy.www.PostHttpsRequestTask;
 
 @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
 public class LogInTask extends AsyncTask<String, String, String> {
 
+    public static final String LOGIN_TARGET = "target";
+    public static final String LOGIN_PASSWORD = "password";
+    public static final String VERIFICATION_CODE = "verification_code";
+    public static final String FINGERPRINT = "fp";
+    public static final String AREA_CODE = "area_code";
+    public static final String REGISTRATION_FLAG = "registered";
+    public static final String INVITATION_CODE = "invitation_code";
+    public static final String LOGIN_SMS_TYPE = "type";
+
     public static final String LOGIN_URL = "https://wx.aceport.com/public/user/login";
+    public static final String REGISTER_URL = "https://wx.aceport.com/public/user/newregister";
     public static final int LOGIN_TIMEOUT = 7000;
     public static final String POST = "POST";
+    public static final String SMS_SUCCEED = "登陆成功";
     public static final String LOGIN_SUCCEED = "登录成功";
     public static final String MESSAGE = "message";
+
+    private static final String REGISTER_FLAG = "1";
+    private static final String LOGIN_FLAG = "0";
+
+    private Context context;
+
+    public LogInTask(Context context) {
+        this.context = context;
+    }
 
     @Override
     protected String doInBackground(String... params) {
@@ -40,7 +61,12 @@ public class LogInTask extends AsyncTask<String, String, String> {
 
         // set up SSLContext and HttpsURLConnection
         try {
-            URL url = new URL(LOGIN_URL);
+            URL url = null;
+            if (params[1].equals(LOGIN_FLAG)) {
+                url = new URL(LOGIN_URL);
+            } else if (params[1].equals(REGISTER_FLAG)) {
+                url = new URL(REGISTER_URL);
+            }
             connection = (HttpsURLConnection) url.openConnection();
             sc = SSLContext.getInstance("TLS");
             sc.init(null, null, new java.security.SecureRandom());
@@ -82,10 +108,12 @@ public class LogInTask extends AsyncTask<String, String, String> {
             if (result != null) {
                 response = new JSONObject(result);
             }
-            if (response != null && response.get(MESSAGE).equals(LOGIN_SUCCEED)) {
-                Log.i("login","SUCCEED!!!!!");
+            if (response != null && (response.get(MESSAGE).equals(SMS_SUCCEED) || response.get(MESSAGE).equals(LOGIN_SUCCEED))) {
+                Log.i("loginActivity","SUCCEED in login with request: " + requestBody);
+                startNavigationActivity();
             } else if (!response.get(MESSAGE).equals(LOGIN_SUCCEED)) {
-                Log.i("loginError", "not correct pwd or username");
+                Log.i("loginActivity","FAILED in login with request: " + requestBody +
+                " and response: " + response.toString());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,7 +124,13 @@ public class LogInTask extends AsyncTask<String, String, String> {
         return null;
     }
 
-    private String extractResponse(HttpsURLConnection connection) throws IOException {
+    private void startNavigationActivity() {
+        Intent navigationIntent = new Intent(context, ButtomNavigationActivity.class);
+        context.startActivity(navigationIntent);
+    }
+
+
+    public static String extractResponse(HttpsURLConnection connection) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder sb = new StringBuilder();
         String line;
@@ -104,7 +138,6 @@ public class LogInTask extends AsyncTask<String, String, String> {
             sb.append(line + "\n");
         }
         bufferedReader.close();
-        //return received string
         return sb.toString();
     }
 }
