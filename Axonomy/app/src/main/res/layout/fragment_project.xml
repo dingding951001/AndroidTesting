@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="590dp"
+    tools:context="pro.axonomy.www.project.ProjectFragment"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,34 +14,31 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/latestProjects"
             android:layout_width="60dp"
             android:layout_height="25dp"
             android:layout_marginLeft="20dp"
             android:gravity="center"
-            android:background="@drawable/light_purple_rounded_layout"
             android:text="Latest"
-            android:textColor="#6A4EFF"
             android:textSize="13sp" />
 
         <TextView
+            android:id="@+id/popularProjects"
             android:layout_width="60dp"
             android:layout_height="25dp"
             android:layout_marginLeft="20dp"
             android:gravity="center"
             android:text="Popular"
-            android:textColor="#A7A4B6"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
         <TextView
+            android:id="@+id/ratingProjects"
             android:layout_width="60dp"
             android:layout_height="25dp"
             android:layout_marginLeft="20dp"
             android:gravity="center"
             android:text="Rating"
-            android:textColor="#A7A4B6"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <ScrollView
