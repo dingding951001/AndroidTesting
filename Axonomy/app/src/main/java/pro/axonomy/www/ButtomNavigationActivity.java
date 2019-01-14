@@ -15,6 +15,9 @@ import pro.axonomy.www.vote.VoteFragment;
 
 public class ButtomNavigationActivity extends AppCompatActivity {
 
+    private static String fragmentTag;
+    private String FRAGMENT_TAG_KEY = "fragment-tag";
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -22,14 +25,17 @@ public class ButtomNavigationActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_vote:
+                    fragmentTag = "navigation_vote";
                     VoteFragment voteFragment = new VoteFragment();
                     openFragment(voteFragment);
                     return true;
                 case R.id.navigation_project:
+                    fragmentTag = "navigation_project";
                     ProjectFragment projectFragment = new ProjectFragment();
                     openFragment(projectFragment);
                     return true;
                 case R.id.navigation_me:
+                    fragmentTag = "navigation_me";
                     MeFragment meFragment = new MeFragment();
                     openFragment(meFragment);
                     return true;
@@ -46,8 +52,16 @@ public class ButtomNavigationActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        View view = navigation.findViewById(R.id.navigation_vote);
-        view.performClick();
+        if (savedInstanceState == null || savedInstanceState.getString(FRAGMENT_TAG_KEY) == null) {
+            View view = navigation.findViewById(R.id.navigation_vote);
+            view.performClick();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(FRAGMENT_TAG_KEY, fragmentTag);
     }
 
     private void openFragment(Fragment fragment) {

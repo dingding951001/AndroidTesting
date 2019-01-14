@@ -19,12 +19,18 @@ import pro.axonomy.www.R;
 
 public class ProjectFragment extends Fragment {
 
+    private static View projectFragmentView = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_project,container,false);
+        if (projectFragmentView != null) {
+            return projectFragmentView;
+        }
 
-        TextView latestProjects = (TextView) view.findViewById(R.id.latestProjects);
+        projectFragmentView = inflater.inflate(R.layout.fragment_project,container,false);
+
+        TextView latestProjects = (TextView) projectFragmentView.findViewById(R.id.latestProjects);
         latestProjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -32,7 +38,7 @@ public class ProjectFragment extends Fragment {
             }
         });
 
-        TextView popularProjects = (TextView) view.findViewById(R.id.popularProjects);
+        TextView popularProjects = (TextView) projectFragmentView.findViewById(R.id.popularProjects);
         popularProjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,7 +46,7 @@ public class ProjectFragment extends Fragment {
             }
         });
 
-        TextView ratingProjects = (TextView) view.findViewById(R.id.ratingProjects);
+        TextView ratingProjects = (TextView) projectFragmentView.findViewById(R.id.ratingProjects);
         ratingProjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +55,13 @@ public class ProjectFragment extends Fragment {
         });
 
         loadLatestProject(latestProjects);
-        return view;
+        return projectFragmentView;
+    }
+
+    @Override
+    public void onCreate(Bundle bundle) {
+        setRetainInstance(true);
+        super.onCreate(bundle);
     }
 
     private void loadLatestProject(View view) {
