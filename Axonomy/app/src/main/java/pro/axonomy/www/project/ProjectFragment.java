@@ -21,7 +21,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -49,12 +48,22 @@ public class ProjectFragment extends Fragment {
 
     private JSONObject projectListParams;
     private HashMap<String, AsyncTask> unfinishedAsyncTasks = new HashMap<>();
+    private HashMap<String, Bitmap> projectImage = new HashMap<>();
+
+    public void addCacheForProjectImage(String url, Bitmap bitmap) {
+        projectImage.put(url, bitmap);
+    }
+
+    public Bitmap retrieveBitmapForURL(String url) {
+        return projectImage.get(url);
+    }
 
     public void removeFromUnfinishedAsyncTaskList(String key) {
         unfinishedAsyncTasks.remove(key);
     }
 
     protected void clearUnfinishedAsyncTaskList() {
+        Log.i("ClearAsyncTask", "Clearing Unfinished AsyncTasks...");
         while (!unfinishedAsyncTasks.isEmpty()) {
             Iterator it = unfinishedAsyncTasks.entrySet().iterator();
             Map.Entry pair = (Map.Entry)it.next();
@@ -62,6 +71,7 @@ public class ProjectFragment extends Fragment {
             task.cancel(true);
             unfinishedAsyncTasks.remove(pair.getKey());
         }
+        Log.i("ClearAsyncTask", "Clearance finished.");
     }
 
     @Override
@@ -202,7 +212,7 @@ public class ProjectFragment extends Fragment {
         ((TextView) view).setTextColor(getResources().getColor(R.color.colorNavClicked));
     }
 
-    protected void createProjectListView(View view) throws JSONException, ExecutionException, InterruptedException {
+    protected void createProjectListView(View view) throws JSONException {
         changeProjectTextViewDisplay(view);
         View rootView = view.getRootView();
         TableLayout tableLayout = (TableLayout) rootView.findViewById(R.id.table_layout_project);
@@ -216,39 +226,32 @@ public class ProjectFragment extends Fragment {
             final String projectId = ((JSONObject) projects.get(i)).get(PROJECT_ID).toString();
 
             TableRow tableRow = new TableRow(getActivity());
-            View tableRowView = view.inflate(getActivity(), R.layout.tablerow_project, tableRow);
-            tableRow.setId(Integer.parseInt(projectId));
 
-            tableRow.setOnClickListener(new View.OnClickListener() {
+            View tableRowView = view.inflate(getActivity(), R.layout.tablerow_project, tableRow);
+            tableRowView.setTag(projectId);
+            tableRowView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    createWebViewWithProjectId(v);
+                public void onClick(View view) {
+                    Log.i("CreateWebViewForProject", "in the onClick function");
+                    createWebViewWithProjectId(view);
                 }
             });
 
-
             TextView rowName = (TextView) tableRowView.findViewById(R.id.rowName);
             rowName.setText(projectName);
+            Log.i("test", rowName.getParent().getClass().toString());
             TextView rowDescription = (TextView) tableRowView.findViewById(R.id.rowDescription);
             rowDescription.setText(projectDescription);
             ImageView rowImage = (ImageView) tableRowView.findViewById(R.id.rowImage);
 
-//            rowImage.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    createWebViewWithProjectId(v);
-//                }
-//            });
-
-
             unfinishedAsyncTasks.put(projectLogoUrl, new LoadImageFromURLTask(rowImage, projectLogoUrl,this).execute(projectLogoUrl));
             tableLayout.addView(tableRowView);
+
         }
     }
 
-    public void createWebViewWithProjectId(View view) {
-        int projectId = view.getId();
-
-        Log.i("CreateWebViewForProject" , ""+projectId);
+    public static void createWebViewWithProjectId(View view) {
+        final String projectId = view.getTag().toString();
+        Log.i("CreateWebViewForProject" , projectId);
     }
 }

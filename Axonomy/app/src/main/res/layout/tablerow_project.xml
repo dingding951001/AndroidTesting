@@ -5,7 +5,6 @@
     android:layout_height="87dp"
     android:layout_marginBottom="10dp"
     android:background="@drawable/rounded_layout"
-    android:clickable="true"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -19,9 +18,7 @@
             android:id="@+id/rowImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:duplicateParentState="true"
-            android:clickable="false"/>
-
+            android:duplicateParentState="true"/>
     </LinearLayout>
 
     <LinearLayout
@@ -37,8 +34,7 @@
             android:layout_marginTop="15dp"
             android:textColor="#ff333333"
             android:textSize="18sp"
-            android:duplicateParentState="true"
-            android:clickable="false"/>
+            android:duplicateParentState="true"/>
 
         <TextView
             android:id="@+id/rowDescription"
@@ -47,7 +43,6 @@
             android:layout_marginTop="10dp"
             android:textColor="#ffa7a4b6"
             android:textSize="13sp"
-            android:duplicateParentState="true"
-            android:clickable="false"/>
+            android:duplicateParentState="true"/>
     </LinearLayout>
 </TableRow>
