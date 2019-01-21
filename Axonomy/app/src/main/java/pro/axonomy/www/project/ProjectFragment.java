@@ -1,6 +1,7 @@
 package pro.axonomy.www.project;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -45,6 +47,7 @@ public class ProjectFragment extends Fragment {
     private static final String PROJECT_LOGO = "logo";
     private static final String PROJECT_DESCRIPTION = "desc";
     private static final String PROJECT_TITLE = "title";
+    private static final String PROJECT_DETAIL_URL_PREFIX = "https://www.axonomy.pro/#/project/details?project_id=";
 
     private JSONObject projectListParams;
     private HashMap<String, AsyncTask> unfinishedAsyncTasks = new HashMap<>();
@@ -250,8 +253,13 @@ public class ProjectFragment extends Fragment {
         }
     }
 
-    public static void createWebViewWithProjectId(View view) {
+    @SuppressLint("ResourceType")
+    public void createWebViewWithProjectId(View view) {
         final String projectId = view.getTag().toString();
         Log.i("CreateWebViewForProject" , projectId);
+
+        final String projectDetailURL = PROJECT_DETAIL_URL_PREFIX + projectId;
+        Intent projectDetailIntent = new Intent(this.getContext(), ProjectDetailActivity.class);
+        startActivity(projectDetailIntent);
     }
 }
