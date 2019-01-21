@@ -1,0 +1,111 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:src="@mipmap/dot"
+                android:layout_gravity="center"
+                android:layout_height="15dp"
+                android:layout_width="15dp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VOTE BEGINS"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="2018/10/24 20:00"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:src="@mipmap/dot"
+                android:layout_gravity="center"
+                android:layout_height="15dp"
+                android:layout_width="15dp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VOTE ENDS"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="2018/10/24 20:00"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:src="@mipmap/dot"
+                android:layout_gravity="center"
+                android:layout_height="15dp"
+                android:layout_width="15dp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="REWARDS"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="2018/10/24 20:00"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                />
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>
