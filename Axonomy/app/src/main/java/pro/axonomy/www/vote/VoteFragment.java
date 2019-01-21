@@ -43,6 +43,8 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
             mSlider.addSlider(textSliderView);
         }
 
+        new GetVoteTask(this.getContext()).execute();
+
         return view;
     }
 
