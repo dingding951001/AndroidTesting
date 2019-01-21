@@ -213,9 +213,19 @@ public class ProjectFragment extends Fragment {
             final String projectName = ((JSONObject) projects.get(i)).get(PROJECT_TITLE).toString();
             final String projectDescription = ((JSONObject) projects.get(i)).get(PROJECT_DESCRIPTION).toString();
             final String projectLogoUrl = ((JSONObject) projects.get(i)).get(PROJECT_LOGO).toString();
+            final String projectId = ((JSONObject) projects.get(i)).get(PROJECT_ID).toString();
 
             TableRow tableRow = new TableRow(getActivity());
             View tableRowView = view.inflate(getActivity(), R.layout.tablerow_project, tableRow);
+            tableRow.setId(Integer.parseInt(projectId));
+
+            tableRow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createWebViewWithProjectId(v);
+                }
+            });
+
 
             TextView rowName = (TextView) tableRowView.findViewById(R.id.rowName);
             rowName.setText(projectName);
@@ -223,8 +233,22 @@ public class ProjectFragment extends Fragment {
             rowDescription.setText(projectDescription);
             ImageView rowImage = (ImageView) tableRowView.findViewById(R.id.rowImage);
 
+//            rowImage.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    createWebViewWithProjectId(v);
+//                }
+//            });
+
+
             unfinishedAsyncTasks.put(projectLogoUrl, new LoadImageFromURLTask(rowImage, projectLogoUrl,this).execute(projectLogoUrl));
             tableLayout.addView(tableRowView);
         }
+    }
+
+    public void createWebViewWithProjectId(View view) {
+        int projectId = view.getId();
+
+        Log.i("CreateWebViewForProject" , ""+projectId);
     }
 }
