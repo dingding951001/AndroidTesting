@@ -1,6 +1,5 @@
 package pro.axonomy.www.vote;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -18,11 +17,6 @@ public class GetVoteTask extends AsyncTask<String, String, String> {
 
     private static final String VOTE_URL_LOGOUT = "https://wx.aceport.com/api/v1/integration/voting/rounds";
 
-    private Context context;
-
-    public GetVoteTask(Context context) {
-        this.context = context;
-    }
     @Override
     protected String doInBackground(String... strings) {
         StringBuilder sb = new StringBuilder();
@@ -42,6 +36,6 @@ public class GetVoteTask extends AsyncTask<String, String, String> {
             Log.i("GetVoteTask", "failed in retrieving vote page without login" + sb.toString());
         }
 
-        return null;
+        return sb.toString();
     }
 }

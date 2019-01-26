@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import pro.axonomy.www.login.MobileLoginActivity;
-
 /**
  * Created by xingyuanding on 1/9/19.
  */

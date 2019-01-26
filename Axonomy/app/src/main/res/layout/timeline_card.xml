@@ -1,6 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="320dp"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="5dp"
     android:orientation="vertical">
 
     <TableLayout
@@ -30,10 +34,10 @@
                 />
 
             <TextView
+                android:id="@+id/vote_begins_time"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="2018/10/24 20:00"
                 android:textColor="#ff333333"
                 android:textSize="16sp"
                 android:layout_weight="1"
@@ -66,7 +70,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="2018/10/24 20:00"
+                android:id="@+id/vote_ends_time"
                 android:textColor="#ff333333"
                 android:textSize="16sp"
                 android:layout_weight="1"
@@ -99,7 +103,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="2018/10/24 20:00"
+                android:id="@+id/reward_time"
                 android:textColor="#ff333333"
                 android:textSize="16sp"
                 android:layout_weight="1"

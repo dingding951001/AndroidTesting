@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_gravity="center"
-        android:text="1"
+        android:id="@+id/vote_index"
         android:textColor="#ff333333"
         android:textSize="16sp"
         />
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_gravity="center"
-        android:text="DINDX"
+        android:id="@+id/vote_project_title"
         android:textColor="#ff333333"
         android:textSize="16sp"
         />
@@ -36,7 +36,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="28392843928.4"
+        android:id="@+id/vote_project_count"
         android:gravity="right"
         android:textColor="#ffa7a4b6"
         android:textSize="16sp"
