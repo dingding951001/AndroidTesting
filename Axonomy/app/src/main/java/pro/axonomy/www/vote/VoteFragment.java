@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -25,7 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import pro.axonomy.www.LoadImageFromURLTask;
 import pro.axonomy.www.R;
+import pro.axonomy.www.WebImageHandler;
 
 /**
  * Created by xingyuanding on 1/12/19.
@@ -37,6 +40,8 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
+
+        WebImageHandler.clearUnfinishedAsyncTaskList();
 
         View view = inflater.inflate(R.layout.fragment_vote, container, false);
 
@@ -149,6 +154,11 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
             JSONObject winner = (JSONObject) winners.get(i);
             TableRow tableRow = new TableRow(getActivity());
             View tableRowView = voteCardView.inflate(getActivity(), R.layout.tablerow_winner_project, tableRow);
+
+            ImageView winnerImg = tableRowView.findViewById(R.id.winner_img);
+            final String logoUrl = winner.getString("logo");
+            WebImageHandler.UNFINISHED_ASYNC_TASKS.put(logoUrl, new LoadImageFromURLTask(winnerImg, logoUrl).execute(logoUrl));
+
             TextView winnerTitle = tableRowView.findViewById(R.id.winner_title);
             title = winner.getString("title");
             winnerTitle.setText(title);
@@ -161,6 +171,11 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
             JSONObject project = (JSONObject) projects.get(i);
             TableRow tableRow = new TableRow(getActivity());
             View tableRowView = voteCardView.inflate(getActivity(), R.layout.tablerow_voted_project, tableRow);
+
+            ImageView projectImg = tableRowView.findViewById(R.id.vote_image);
+            final String logoUrl = project.getString("logo");
+            WebImageHandler.UNFINISHED_ASYNC_TASKS.put(logoUrl, new LoadImageFromURLTask(projectImg, logoUrl).execute(logoUrl));
+
             TextView index = tableRowView.findViewById(R.id.vote_index);
             index.setText(String.valueOf(i+1));
             TextView projectTitle = tableRowView.findViewById(R.id.vote_project_title);

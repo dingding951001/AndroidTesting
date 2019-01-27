@@ -19,7 +19,7 @@
         android:layout_height="30dp"
         android:layout_marginLeft="15dp"
         android:layout_gravity="center"
-        android:src="@mipmap/ic_launcher"
+        android:id="@+id/vote_image"
         />
 
     <TextView

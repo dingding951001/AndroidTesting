@@ -14,21 +14,17 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import pro.axonomy.www.project.ProjectFragment;
-
 @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
 public class LoadImageFromURLTask extends AsyncTask<String, Void, Bitmap> {
 
     private static final int LOAD_IMAGE_TIME_OUT = 3000;
 
-    private ProjectFragment fragment;
     private ImageView imageView;
     private String id;
 
-    public LoadImageFromURLTask(ImageView imageView, String id, ProjectFragment fragment) {
+    public LoadImageFromURLTask(ImageView imageView, String id) {
         this.imageView = imageView;
         this.id = id;
-        this.fragment = fragment;
     }
 
     @Override
@@ -36,7 +32,7 @@ public class LoadImageFromURLTask extends AsyncTask<String, Void, Bitmap> {
         Log.d("LoadImageTask", "doInBackground " + id);
         Bitmap result = null;
         try {
-            Bitmap cache = fragment.retrieveBitmapForURL(params[0]);
+            Bitmap cache = WebImageHandler.WEB_IMAGE_MAP.get(params[0]);
             if (cache != null) {
                 result = cache;
                 Log.i("LoadImageTask", "Cache hit for URL: " + params[0]);
@@ -48,7 +44,7 @@ public class LoadImageFromURLTask extends AsyncTask<String, Void, Bitmap> {
                 conn.setReadTimeout(LOAD_IMAGE_TIME_OUT);
                 if (conn.getContent() != null) {
                     result = BitmapFactory.decodeStream((InputStream) conn.getContent());
-                    fragment.addCacheForProjectImage(params[0], result);
+                    WebImageHandler.WEB_IMAGE_MAP.put(params[0], result);
                     Log.i("LoadImageTask", "SUCCEED in loading image from URL: " + params[0]);
                 } else {
                     Log.i("LoadImageTask", "NULL content for content with URL: " + params[0]);
@@ -56,10 +52,10 @@ public class LoadImageFromURLTask extends AsyncTask<String, Void, Bitmap> {
             }
         } catch (SocketTimeoutException e) {
             Log.i("LoadImageTask", "TIMEOUT in loading image from URL: " + params[0]);
-            fragment.removeFromUnfinishedAsyncTaskList(this.id);
+            WebImageHandler.UNFINISHED_ASYNC_TASKS.remove(this.id);
         } catch (IOException e) {
             e.printStackTrace();
-            fragment.removeFromUnfinishedAsyncTaskList(this.id);
+            WebImageHandler.UNFINISHED_ASYNC_TASKS.remove(this.id);
         }
         return result;
     }
@@ -70,6 +66,6 @@ public class LoadImageFromURLTask extends AsyncTask<String, Void, Bitmap> {
         if (result != null) {
             imageView.setImageBitmap(result);
         }
-        fragment.removeFromUnfinishedAsyncTaskList(this.id);
+        WebImageHandler.UNFINISHED_ASYNC_TASKS.remove(this.id);
     }
 }

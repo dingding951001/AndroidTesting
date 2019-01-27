@@ -24,7 +24,7 @@
         <activity
             android:name=".ButtomNavigationActivity"
             android:label="@string/title_activity_buttom_navigation"></activity>
-        <activity android:name=".project.ProjectDetailActivity" />
+        <activity android:name=".WebViewActivity" />
     </application>
 
 </manifest>

@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -28,6 +27,8 @@ import java.util.concurrent.ExecutionException;
 
 import pro.axonomy.www.LoadImageFromURLTask;
 import pro.axonomy.www.R;
+import pro.axonomy.www.WebImageHandler;
+import pro.axonomy.www.WebViewActivity;
 
 /**
  * Created by xingyuanding on 1/12/19.
@@ -50,36 +51,13 @@ public class ProjectFragment extends Fragment {
     private static final String PROJECT_DETAIL_URL_PREFIX = "https://www.axonomy.pro/#/project/details?project_id=";
 
     private JSONObject projectListParams;
-    private HashMap<String, AsyncTask> unfinishedAsyncTasks = new HashMap<>();
-    private HashMap<String, Bitmap> projectImage = new HashMap<>();
-
-    public void addCacheForProjectImage(String url, Bitmap bitmap) {
-        projectImage.put(url, bitmap);
-    }
-
-    public Bitmap retrieveBitmapForURL(String url) {
-        return projectImage.get(url);
-    }
-
-    public void removeFromUnfinishedAsyncTaskList(String key) {
-        unfinishedAsyncTasks.remove(key);
-    }
-
-    protected void clearUnfinishedAsyncTaskList() {
-        Log.i("ClearAsyncTask", "Clearing Unfinished AsyncTasks...");
-        while (!unfinishedAsyncTasks.isEmpty()) {
-            Iterator it = unfinishedAsyncTasks.entrySet().iterator();
-            Map.Entry pair = (Map.Entry)it.next();
-            AsyncTask task = (AsyncTask) pair.getValue();
-            task.cancel(true);
-            unfinishedAsyncTasks.remove(pair.getKey());
-        }
-        Log.i("ClearAsyncTask", "Clearance finished.");
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
+
+        WebImageHandler.clearUnfinishedAsyncTaskList();
+
         if (projectFragmentView != null) {
             return projectFragmentView;
         }
@@ -154,7 +132,7 @@ public class ProjectFragment extends Fragment {
     }
 
     private void loadLatestProject(View view) throws JSONException, ExecutionException, InterruptedException {
-        clearUnfinishedAsyncTaskList();
+        WebImageHandler.clearUnfinishedAsyncTaskList();
 
         final JSONObject latestRequest = new JSONObject() {{
             put(PAGE, 1);
@@ -169,7 +147,7 @@ public class ProjectFragment extends Fragment {
     }
 
     private void loadPopularProject(View view) throws JSONException, ExecutionException, InterruptedException {
-        clearUnfinishedAsyncTaskList();
+        WebImageHandler.clearUnfinishedAsyncTaskList();
 
         final JSONObject popularRequest = new JSONObject() {{
             put(PAGE, 1);
@@ -185,7 +163,7 @@ public class ProjectFragment extends Fragment {
 
 
     private void loadRatingProject(View view) throws JSONException, ExecutionException, InterruptedException {
-        clearUnfinishedAsyncTaskList();
+        WebImageHandler.clearUnfinishedAsyncTaskList();
 
         final JSONObject popularRequest = new JSONObject() {{
             put(PAGE, 1);
@@ -247,7 +225,7 @@ public class ProjectFragment extends Fragment {
             rowDescription.setText(projectDescription);
             ImageView rowImage = (ImageView) tableRowView.findViewById(R.id.rowImage);
 
-            unfinishedAsyncTasks.put(projectLogoUrl, new LoadImageFromURLTask(rowImage, projectLogoUrl,this).execute(projectLogoUrl));
+            WebImageHandler.UNFINISHED_ASYNC_TASKS.put(projectLogoUrl, new LoadImageFromURLTask(rowImage, projectLogoUrl).execute(projectLogoUrl));
             tableLayout.addView(tableRowView);
 
         }
@@ -259,7 +237,8 @@ public class ProjectFragment extends Fragment {
         Log.i("CreateWebViewForProject" , projectId);
 
         final String projectDetailURL = PROJECT_DETAIL_URL_PREFIX + projectId;
-        Intent projectDetailIntent = new Intent(this.getContext(), ProjectDetailActivity.class);
+        Intent projectDetailIntent = new Intent(this.getContext(), WebViewActivity.class);
+        projectDetailIntent.putExtra(WebViewActivity.URL_PARAM, projectDetailURL);
         startActivity(projectDetailIntent);
     }
 }
