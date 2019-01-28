@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -22,8 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import pro.axonomy.www.GetHttpUrlRequestTask;
@@ -95,8 +94,10 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
             JSONObject votingData = (JSONObject) votingRoundsJson.get(DATA);
             JSONArray votingItems = (JSONArray) votingData.get("items");
 
-            LinearLayout voteContainer = view.findViewById(R.id.vote_container);
+            JSONObject currentRound = (JSONObject) votingItems.get(0);
+            setCurrentRound(view, currentRound);
 
+            LinearLayout voteContainer = view.findViewById(R.id.vote_container);
             for (int i = 1; i < votingItems.length(); i++)
             {
                 JSONObject votingItem = votingItems.getJSONObject(i);
@@ -136,6 +137,76 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setCurrentRound(View view, JSONObject data) throws JSONException {
+        int sequence = data.getInt("seq");
+        TextView round = view.findViewById(R.id.current_round);
+        round.setText("ROUND " + sequence);
+
+        setCurrentTimeline(view, data);
+        setCurrentActivity(view, data);
+        setCurrentRevenue(view, data);
+        setCurrentBalance(view, data);
+    }
+
+    private void setCurrentTimeline(View view, JSONObject data) throws JSONException {
+        JSONObject timelineData = data.getJSONObject("timeline_card");
+        String timelineType = timelineData.getString("type");
+
+        LinearLayout timelineCard = view.findViewById(R.id.current_timeline_card);
+        if (timelineType.equals("comming_soon")) {
+            LinearLayout startingSoonLayout = new LinearLayout(getActivity());
+            View startingSoonView = view.inflate(getActivity(), R.layout.timeline_starting_soon, startingSoonLayout);
+            TextView startingSoonText = startingSoonView.findViewById(R.id.starting_soon_text);
+            startingSoonText.setText(timelineData.getString("text"));
+            timelineCard.addView(startingSoonView);
+        }
+    }
+
+    private void setCurrentActivity(View view, JSONObject data) throws JSONException {
+        TableLayout activityTable = (TableLayout) view.findViewById(R.id.table_current_activity);
+        JSONObject activityData = data.getJSONObject("activity_card");
+        TextView activityTitle = view.findViewById(R.id.current_activity_title);
+        activityTitle.setText(activityData.getString("title"));
+        TextView activityLabel = view.findViewById(R.id.current_activity_label);
+        JSONArray labels = activityData.getJSONArray("labels");
+        for (int i = 0; i < labels.length(); i++) {
+            activityLabel.setText(labels.getJSONObject(i).getString("text"));
+        }
+        JSONArray activityItems = activityData.getJSONArray("items");
+        for (int i = 0; i < activityItems.length(); i++) {
+            JSONObject activityItem = (JSONObject) activityItems.get(i);
+            TableRow tableRow = new TableRow(getActivity());
+            View tableRowView = view.inflate(getActivity(), R.layout.tablerow_current_activity, tableRow);
+            TextView activityText = tableRowView.findViewById(R.id.activity_text);
+            activityText.setText(activityItem.getString("text"));
+            activityTable.addView(tableRowView);
+        }
+    }
+
+    private void setCurrentRevenue(View view, JSONObject data) throws JSONException {
+        JSONObject revenueData = data.getJSONObject("revenue_card");
+        TextView revenueTitle = view.findViewById(R.id.current_revenue_title);
+        revenueTitle.setText(revenueData.getString("title"));
+        TextView revenueTip = view.findViewById(R.id.current_revenue_tip);
+        revenueTip.setText(revenueData.getString("tips"));
+        TextView revenueItemLeft = view.findViewById(R.id.current_revenue_item_left);
+        revenueItemLeft.setText(revenueData.getJSONArray("items").getJSONObject(0).getString("content"));
+        TextView revenueItemRight = view.findViewById(R.id.current_revenue_item_right);
+        revenueItemRight.setText(revenueData.getJSONArray("items").getJSONObject(1).getString("content"));
+        TextView revenueCost = view.findViewById(R.id.current_revenue_cost);
+        revenueCost.setText(revenueData.getString("cost"));
+    }
+
+    private void setCurrentBalance(View view, JSONObject data) throws JSONException {
+        JSONObject balanceData = data.getJSONObject("balance_card");
+        TextView balanceTitle = view.findViewById(R.id.current_balance_title);
+        balanceTitle.setText(balanceData.getString("title"));
+        TextView balanceAmount = view.findViewById(R.id.current_balance_amount);
+        balanceAmount.setText(balanceData.getString("balance_str"));
+        Button balanceButton = view.findViewById(R.id.current_balance_button);
+        balanceButton.setText(balanceData.getString("button_text"));
     }
 
     private void setTimelineCard(View timelineCardView, JSONObject timelineData) throws JSONException {
