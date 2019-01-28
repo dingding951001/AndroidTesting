@@ -18,6 +18,8 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.ExecutionException;
+
 import pro.axonomy.www.ButtomNavigationActivity;
 import pro.axonomy.www.R;
 
@@ -93,7 +95,7 @@ public class MobileLoginActivity extends Activity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-    public void login(View view) throws JSONException {
+    public void login(View view) throws JSONException, ExecutionException, InterruptedException {
         final EditText mobileNumberText = (EditText) findViewById(R.id.mobileNumber);
         final String mobileNumber = mobileNumberText.getText().toString();
         final Spinner areaCodeSpinner = (Spinner) findViewById(R.id.country_code_spinner);
@@ -123,7 +125,12 @@ public class MobileLoginActivity extends Activity {
                     put(LogInTask.REGISTRATION_FLAG, 1);
             }};
 
-            new LogInTask(this).execute(requestBody.toString(), "1");
+            String response = new LogInTask(this).execute(requestBody.toString(), "1").get();
+
+            if (response.equals(LogInTask.CALLBACK_SUCCEED)) {
+                Intent buttomIntent = new Intent(this, ButtomNavigationActivity.class);
+                startActivity(buttomIntent);
+            }
         }
     }
 
