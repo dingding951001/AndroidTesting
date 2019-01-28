@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import pro.axonomy.www.GetHttpUrlRequestTask;
 import pro.axonomy.www.LoadImageFromURLTask;
 import pro.axonomy.www.R;
 import pro.axonomy.www.WebImageHandler;
@@ -36,6 +37,10 @@ import pro.axonomy.www.WebImageHandler;
 public class VoteFragment extends Fragment implements BaseSliderView.OnSliderClickListener {
 
     private SliderLayout mSlider;
+    private static final String BANNER_URL = "https://wx.aceport.com/public/project/banner/voteslice";
+    private static final String VOTE_URL_LOGOUT = "https://wx.aceport.com/api/v1/integration/voting/rounds";
+    private static final String DATA = "data";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -45,8 +50,16 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         View view = inflater.inflate(R.layout.fragment_vote, container, false);
 
-        generateBanner(view);
-        generateVotingRoundsView(view);
+        try {
+            generateBanner(view);
+            generateVotingRoundsView(view);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return view;
     }
@@ -56,13 +69,15 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         // TODO if needed
     }
 
-    private void generateBanner(View view) {
+    private void generateBanner(View view) throws ExecutionException, InterruptedException, JSONException {
         mSlider = view.findViewById(R.id.slider);
-        List<String> imageUrls = new ArrayList<>();
-        imageUrls.add("https://img.aceport.com/4102152238648369.png");
-        imageUrls.add("https://img.aceport.com/4720170772930343.png");
+        JSONObject response = new JSONObject(new GetHttpUrlRequestTask().execute(BANNER_URL).get());
+        JSONArray bannerData = (JSONArray) response.get(DATA);
+        Log.i("GenerateBanner", "Received response with data: " + bannerData.toString());
 
-        for(String imageUrl : imageUrls){
+        for(int i=0; i< bannerData.length(); i++) {
+            JSONObject banner = bannerData.getJSONObject(i);
+            final String imageUrl = banner.get("image_url").toString();
             TextSliderView textSliderView = new TextSliderView(getActivity());
             textSliderView
                     .image(imageUrl)
@@ -75,9 +90,9 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     @SuppressLint("ResourceType")
     private void generateVotingRoundsView(View view) {
         try {
-            String votingRoundsData = new GetVoteTask().execute().get();
+            String votingRoundsData = new GetHttpUrlRequestTask().execute(VOTE_URL_LOGOUT).get();
             JSONObject votingRoundsJson = new JSONObject(votingRoundsData);
-            JSONObject votingData = (JSONObject) votingRoundsJson.get("data");
+            JSONObject votingData = (JSONObject) votingRoundsJson.get(DATA);
             JSONArray votingItems = (JSONArray) votingData.get("items");
 
             LinearLayout voteContainer = view.findViewById(R.id.vote_container);

@@ -1,8 +1,6 @@
-package pro.axonomy.www.vote;
+package pro.axonomy.www;
 
 import android.os.AsyncTask;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -12,16 +10,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-@RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-public class GetVoteTask extends AsyncTask<String, String, String> {
-
-    private static final String VOTE_URL_LOGOUT = "https://wx.aceport.com/api/v1/integration/voting/rounds";
+public class GetHttpUrlRequestTask extends AsyncTask<String, String, String> {
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected String doInBackground(String... param) {
         StringBuilder sb = new StringBuilder();
         try {
-            URL url = new URL(VOTE_URL_LOGOUT);
+            validateURL(param);
+
+            final URL url = new URL(param[0]);
+            Log.i("GetHttpUrlRequestTask", "Performing GET request to Url: " + url);
+
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
@@ -31,11 +30,18 @@ public class GetVoteTask extends AsyncTask<String, String, String> {
                 sb.append(line + "\n");
             }
             bufferedReader.close();
-            Log.i("GetVoteTask", "succeed in retrieving vote page without login: " + sb.toString());
+            Log.i("GetHttpUrlRequestTask", "succeed in calling API with response: " + sb.toString());
         } catch (Exception e) {
-            Log.i("GetVoteTask", "failed in retrieving vote page without login" + sb.toString());
+            Log.i("GetHttpUrlRequestTask", "failed in calling API with response" + sb.toString());
         }
 
         return sb.toString();
+    }
+
+    private void validateURL(String... param) {
+        if (param == null || param.length == 0) {
+            Log.e("GetHttpUrlTask", "EMPTY url for request.");
+            throw new RuntimeException("Empty url, cannot perform GET request.");
+        }
     }
 }
