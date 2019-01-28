@@ -7,6 +7,9 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,6 +26,7 @@ import javax.net.ssl.SSLContext;
 
 import pro.axonomy.www.ButtomNavigationActivity;
 import pro.axonomy.www.PostHttpsRequestTask;
+import pro.axonomy.www.UserInfo;
 
 @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
 public class LogInTask extends AsyncTask<String, String, String> {
@@ -46,6 +50,9 @@ public class LogInTask extends AsyncTask<String, String, String> {
 
     private static final String REGISTER_FLAG = "1";
     private static final String LOGIN_FLAG = "0";
+
+    public static final String CALLBACK_SUCCEED = "SUCCEED";
+    public static final String CALLBACK_FAILED = "FAILED";
 
     private Context context;
 
@@ -95,6 +102,7 @@ public class LogInTask extends AsyncTask<String, String, String> {
         // validate the username and password for login
         String result = null;
         final int status;
+        String callBackFlag = CALLBACK_SUCCEED;
         try {
             status = connection.getResponseCode();
             switch (status) {
@@ -111,9 +119,14 @@ public class LogInTask extends AsyncTask<String, String, String> {
             if (response != null && (response.get(MESSAGE).equals(SMS_SUCCEED) || response.get(MESSAGE).equals(LOGIN_SUCCEED))) {
                 Log.i("loginActivity","SUCCEED in login with request: " + requestBody);
                 startNavigationActivity();
+
+                String userName = extractUserNameFromRequest(requestBody);
+                UserInfo.setUserName(this.context, userName);
+                Log.i("loginActivity", "Stored user name as preference.");
             } else if (!response.get(MESSAGE).equals(LOGIN_SUCCEED)) {
                 Log.i("loginActivity","FAILED in login with request: " + requestBody +
                 " and response: " + response.toString());
+                callBackFlag = CALLBACK_FAILED;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -121,14 +134,13 @@ public class LogInTask extends AsyncTask<String, String, String> {
             e.printStackTrace();
         }
 
-        return null;
+        return callBackFlag;
     }
 
     private void startNavigationActivity() {
         Intent navigationIntent = new Intent(context, ButtomNavigationActivity.class);
         context.startActivity(navigationIntent);
     }
-
 
     public static String extractResponse(HttpsURLConnection connection) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -139,5 +151,11 @@ public class LogInTask extends AsyncTask<String, String, String> {
         }
         bufferedReader.close();
         return sb.toString();
+    }
+
+    private String extractUserNameFromRequest(String requestBody) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode request = mapper.readTree(requestBody);
+        return request.get(LOGIN_TARGET).asText();
     }
 }

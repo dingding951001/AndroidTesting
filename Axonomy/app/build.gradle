@@ -32,4 +32,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
+
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.5'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.5'
 }
