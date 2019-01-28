@@ -6,12 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
-import pro.axonomy.www.login.EmailLoginActivity;
 import pro.axonomy.www.login.MobileLoginActivity;
 
-/**
- * Created by xingyuanding on 1/9/19.
- */
 public class StartUpPageActivity extends Activity {
 
     @Override

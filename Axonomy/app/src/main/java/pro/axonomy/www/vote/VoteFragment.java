@@ -40,6 +40,8 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     private static final String VOTE_URL_LOGOUT = "https://wx.aceport.com/api/v1/integration/voting/rounds";
     private static final String DATA = "data";
 
+    private static View view = null;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -47,8 +49,14 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         WebImageHandler.clearUnfinishedAsyncTaskList();
 
-        View view = inflater.inflate(R.layout.fragment_vote, container, false);
+        view = inflater.inflate(R.layout.fragment_vote, container, false);
 
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         try {
             generateBanner(view);
             generateVotingRoundsView(view);
@@ -59,8 +67,6 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        return view;
     }
 
     @Override
