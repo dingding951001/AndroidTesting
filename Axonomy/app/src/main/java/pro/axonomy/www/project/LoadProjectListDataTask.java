@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -58,12 +59,18 @@ public class LoadProjectListDataTask extends AsyncTask<String, Void, Void> {
 
     private View view;
     private ProjectFragment projectFragment;
-
+    private ProgressBar mProgressBar;
 
     public LoadProjectListDataTask(View view, Context context, ProjectFragment fragment) {
         Log.i("LoadProjectList", "in the constructor");
         this.view = view;
         this.projectFragment = fragment;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        mProgressBar = (ProgressBar) view.getRootView().findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -103,6 +110,7 @@ public class LoadProjectListDataTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected void onPostExecute(Void param) {
+        mProgressBar.setVisibility(View.GONE);
         projectFragment.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 try {

@@ -5,13 +5,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import org.json.JSONObject;
 
 import pro.axonomy.www.R;
 import pro.axonomy.www.WebImageHandler;
@@ -21,8 +18,6 @@ public class ProjectFragment extends Fragment {
     private static View projectFragmentView = null;
     private Context _context = getContext();
     private ProjectFragment _fragment = this;
-
-    private JSONObject projectListParams;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -58,6 +53,7 @@ public class ProjectFragment extends Fragment {
             public void onClick(View v) {
                 new LoadProjectListDataTask(v, _context, _fragment).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.RATING);
             }
+
         });
 
         new LoadProjectListDataTask(latestProjects, this.getContext(), this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.LATEST);
