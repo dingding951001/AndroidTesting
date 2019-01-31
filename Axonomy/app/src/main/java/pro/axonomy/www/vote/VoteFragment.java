@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -185,8 +186,11 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
             JSONObject activityItem = (JSONObject) activityItems.get(i);
             TableRow tableRow = new TableRow(getActivity());
             View tableRowView = view.inflate(getActivity(), R.layout.tablerow_current_activity, tableRow);
-            TextView activityText = tableRowView.findViewById(R.id.activity_text);
-            activityText.setText(activityItem.getString("text"));
+            TextView currentActivityText = tableRowView.findViewById(R.id.current_activity_text);
+            String activityItemText = activityItem.getString("text");
+            activityItemText = activityItemText.replace("<em>", "<font color=\"#FF4C74\"><strong>");
+            activityItemText = activityItemText.replace("</em>", "</strong></font>");
+            currentActivityText.setText(Html.fromHtml(activityItemText));
             activityTable.addView(tableRowView);
         }
     }

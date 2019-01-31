@@ -18,7 +18,7 @@
         android:layout_marginLeft="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/activity_text"
+        android:id="@+id/current_activity_text"
         android:textColor="#ff333333"
         android:textSize="16sp"
         />
