@@ -16,7 +16,7 @@
         <item>Germany  0049</item>
         <item>Denmark  0045</item>
     </string-array>
-    <string name="title_activity_buttom_navigation">ButtomNavigationActivity</string>
+    <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
     <string name="title_vote">VOTE</string>
     <string name="title_project">PROJECT</string>
     <string name="title_me">ME</string>

@@ -128,7 +128,7 @@
                 android:paddingLeft="15dp"
                 android:textSize="15sp" />
             <EditText
-                android:id="@+id/sendCode"
+                android:id="@+id/sendCodeToPhone"
                 android:layout_width="94dp"
                 android:layout_height="44dp"
                 android:layout_marginLeft="10dp"

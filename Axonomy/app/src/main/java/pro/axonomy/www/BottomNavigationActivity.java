@@ -13,7 +13,7 @@ import pro.axonomy.www.me.MeFragment;
 import pro.axonomy.www.project.ProjectFragment;
 import pro.axonomy.www.vote.VoteFragment;
 
-public class ButtomNavigationActivity extends AppCompatActivity {
+public class BottomNavigationActivity extends AppCompatActivity {
 
     private static String fragmentTag;
     private String FRAGMENT_TAG_KEY = "fragment-tag";
@@ -47,7 +47,7 @@ public class ButtomNavigationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_buttom_navigation);
+        setContentView(R.layout.layout_bottom_navigation);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

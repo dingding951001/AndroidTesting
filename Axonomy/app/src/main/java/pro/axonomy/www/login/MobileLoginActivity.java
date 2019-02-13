@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -20,12 +22,13 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
-import pro.axonomy.www.ButtomNavigationActivity;
+import pro.axonomy.www.BottomNavigationActivity;
 import pro.axonomy.www.R;
 
 public class MobileLoginActivity extends Activity {
 
     private String fp;
+    private int registered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,16 +85,33 @@ public class MobileLoginActivity extends Activity {
     }
 
     public void sendSMSToPhone(View view) throws JSONException {
+        final EditText sendCodeText = (EditText) findViewById(R.id.sendCodeToPhone);
         final EditText mobileNumberText = (EditText) findViewById(R.id.mobileNumber);
         final String mobileNumber = mobileNumberText.getText().toString();
-        // TODO: extract the area code
+        if (sendCodeText.getText().toString().equals("Send Code") && !TextUtils.isEmpty(mobileNumber)) {
+            final Spinner areaCodeSpinner = (Spinner) findViewById(R.id.country_code_spinner);
+            final String areaCode = areaCodeSpinner.getSelectedItem().toString().replaceAll("\\D+", "");
 
-        final JSONObject requestBody = new JSONObject() {{
-            put(LogInTask.LOGIN_SMS_TYPE, 1);
-            put(LogInTask.LOGIN_TARGET, mobileNumber);
-        }};
+            final JSONObject requestBody = new JSONObject() {{
+                put(LogInTask.LOGIN_SMS_TYPE, 0);
+                put(LogInTask.LOGIN_TARGET, mobileNumber);
+                put(LogInTask.AREA_CODE, areaCode);
+            }};
 
-        new SMSTask(this).execute(requestBody.toString());
+            new SMSTask(this).execute(requestBody.toString());
+
+            new CountDownTimer(180000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    sendCodeText.setText(millisUntilFinished / 1000 + " s");
+                }
+
+                @Override
+                public void onFinish() {
+                    sendCodeText.setText("Send Code");
+                }
+            }.start();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
@@ -122,19 +142,20 @@ public class MobileLoginActivity extends Activity {
             final JSONObject requestBody = new JSONObject() {{
                     put(LogInTask.VERIFICATION_CODE, verificationCode);
                     put(LogInTask.FINGERPRINT, fp);
-                    put(LogInTask.REGISTRATION_FLAG, 1);
+                    put(LogInTask.REGISTRATION_FLAG, registered);
             }};
 
             String response = new LogInTask(this).execute(requestBody.toString(), "1").get();
 
             if (response.equals(LogInTask.CALLBACK_SUCCEED)) {
-                Intent buttomIntent = new Intent(this, ButtomNavigationActivity.class);
-                startActivity(buttomIntent);
+                Intent bottomIntent = new Intent(this, BottomNavigationActivity.class);
+                startActivity(bottomIntent);
             }
         }
     }
 
-    public void setFp(String fingerprint) {
+    public void setFpAndRegistered(String fingerprint, int registered) {
         this.fp = fingerprint;
+        this.registered = registered;
     }
 }

@@ -22,8 +22,8 @@
         <activity android:name=".login.MobileLoginActivity" />
         <activity android:name=".login.EmailLoginActivity" />
         <activity
-            android:name=".ButtomNavigationActivity"
-            android:label="@string/title_activity_buttom_navigation"></activity>
+            android:name=".BottomNavigationActivity"
+            android:label="@string/title_activity_bottom_navigation"></activity>
         <activity android:name=".WebViewActivity" />
     </application>
 

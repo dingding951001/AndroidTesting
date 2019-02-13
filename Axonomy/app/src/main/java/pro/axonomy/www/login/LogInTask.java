@@ -24,7 +24,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
-import pro.axonomy.www.ButtomNavigationActivity;
+import pro.axonomy.www.BottomNavigationActivity;
 import pro.axonomy.www.PostHttpsRequestTask;
 import pro.axonomy.www.UserInfo;
 
@@ -118,11 +118,12 @@ public class LogInTask extends AsyncTask<String, String, String> {
             }
             if (response != null && (response.get(MESSAGE).equals(SMS_SUCCEED) || response.get(MESSAGE).equals(LOGIN_SUCCEED))) {
                 Log.i("loginActivity","SUCCEED in login with request: " + requestBody);
-                startNavigationActivity();
 
                 String userName = extractUserNameFromRequest(requestBody);
                 UserInfo.setUserName(this.context, userName);
                 Log.i("loginActivity", "Stored user name as preference.");
+
+                startNavigationActivity();
             } else if (!response.get(MESSAGE).equals(LOGIN_SUCCEED)) {
                 Log.i("loginActivity","FAILED in login with request: " + requestBody +
                 " and response: " + response.toString());
@@ -138,7 +139,7 @@ public class LogInTask extends AsyncTask<String, String, String> {
     }
 
     private void startNavigationActivity() {
-        Intent navigationIntent = new Intent(context, ButtomNavigationActivity.class);
+        Intent navigationIntent = new Intent(context, BottomNavigationActivity.class);
         context.startActivity(navigationIntent);
     }
 

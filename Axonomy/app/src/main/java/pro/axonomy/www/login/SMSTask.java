@@ -50,7 +50,6 @@ public class SMSTask extends AsyncTask<String, String, String> {
             sc.init(null, null, new java.security.SecureRandom());
             connection.setSSLSocketFactory(sc.getSocketFactory());
 
-
             // set Timeout and method
             connection.setReadTimeout(SMS_TIMEOUT);
             connection.setConnectTimeout(SMS_TIMEOUT);
@@ -89,7 +88,9 @@ public class SMSTask extends AsyncTask<String, String, String> {
             if (response != null && response.get(MESSAGE).equals(SEND_SUCCEED)) {
                 String fingerprint = extractFingerPrint(response);
                 Log.i("sendSMS", "Received the Fingerprint as: " + fingerprint);
-                setFingerPrintBackToActivity(fingerprint);
+                int registered = extractRegisteredFlag(response);
+                Log.i("sendSMS", "Received the Registered as: " + registered);
+                setFingerPrintBackToActivity(fingerprint, registered);
                 Log.i("sendSMS","SUCCEED sending with request: " + requestBody);
             } else if (!response.get(MESSAGE).equals(SEND_SUCCEED)) {
                 Log.i("sendSMS","FAILED sending with request: " + requestBody);
@@ -111,11 +112,18 @@ public class SMSTask extends AsyncTask<String, String, String> {
         return null;
     }
 
-    private void setFingerPrintBackToActivity(String fingerprint) {
+    private int extractRegisteredFlag(JSONObject response) throws JSONException {
+        if (response != null && response.get(DATA) != null) {
+            return (int) ((JSONObject)response.get(DATA)).get(LogInTask.REGISTRATION_FLAG);
+        }
+        return -1;
+    }
+
+    private void setFingerPrintBackToActivity(String fingerprint, int registered) {
         if (emailActivity != null) {
-            emailActivity.setFp(fingerprint);
+            emailActivity.setFpAndRegistered(fingerprint, registered);
         } else if (mobileActivity != null ) {
-            mobileActivity.setFp(fingerprint);
+            mobileActivity.setFpAndRegistered(fingerprint, registered);
         }
     }
 }
