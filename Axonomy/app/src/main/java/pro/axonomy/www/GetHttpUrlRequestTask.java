@@ -1,6 +1,8 @@
 package pro.axonomy.www;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -12,6 +14,12 @@ import java.net.URL;
 
 public class GetHttpUrlRequestTask extends AsyncTask<String, String, String> {
 
+    private Context context;
+
+    public GetHttpUrlRequestTask(Context context) {
+        this.context = context;
+    }
+
     @Override
     protected String doInBackground(String... param) {
         StringBuilder sb = new StringBuilder();
@@ -22,6 +30,9 @@ public class GetHttpUrlRequestTask extends AsyncTask<String, String, String> {
             Log.i("GetHttpUrlRequestTask", "Performing GET request to Url: " + url);
 
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            if (!TextUtils.isEmpty(UserInfo.getAuthorization(context))) {
+                urlConnection.setRequestProperty("authorization", UserInfo.getAuthorization(context));
+            }
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 

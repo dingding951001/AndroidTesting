@@ -16,7 +16,7 @@ public class StartUpPageActivity extends Activity {
         setContentView(R.layout.splashscreen);
         Handler handler = new Handler();
 
-        if (UserInfo.getUserName(this).length() == 0) {
+        if (UserInfo.getAuthorization(this).length() == 0) {
             handler.postDelayed(new Runnable() {
                 public void run() {
                     finish();
@@ -25,7 +25,7 @@ public class StartUpPageActivity extends Activity {
                 }
             }, 2000);
         } else {
-            Log.i("StartUp", "Already logged in with username: " + UserInfo.getUserName(this));
+            Log.i("StartUp", "Already logged in with token: " + UserInfo.getAuthorization(this));
             handler.postDelayed(new Runnable() {
                 public void run() {
                     finish();

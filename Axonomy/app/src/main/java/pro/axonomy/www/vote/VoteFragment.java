@@ -77,7 +77,7 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
 
     private void generateBanner(View view) throws ExecutionException, InterruptedException, JSONException {
         mSlider = view.findViewById(R.id.slider);
-        JSONObject response = new JSONObject(new GetHttpUrlRequestTask().execute(BANNER_URL).get());
+        JSONObject response = new JSONObject(new GetHttpUrlRequestTask(getContext()).execute(BANNER_URL).get());
         JSONArray bannerData = (JSONArray) response.get(DATA);
         Log.i("GenerateBanner", "Received response with data: " + bannerData.toString());
 
@@ -96,7 +96,7 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     @SuppressLint("ResourceType")
     private void generateVotingRoundsView(View view) {
         try {
-            String votingRoundsData = new GetHttpUrlRequestTask().execute(VOTE_URL_LOGOUT).get();
+            String votingRoundsData = new GetHttpUrlRequestTask(getContext()).execute(VOTE_URL_LOGOUT).get();
             JSONObject votingRoundsJson = new JSONObject(votingRoundsData);
             JSONObject votingData = (JSONObject) votingRoundsJson.get(DATA);
             JSONArray votingItems = (JSONArray) votingData.get("items");

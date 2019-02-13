@@ -97,7 +97,7 @@ public class LogInTask extends AsyncTask<String, String, String> {
 
         // send the request body to Https
         String requestBody = params[0];
-        PostHttpsRequestTask.sendPostRequestBodyToHttpsConnection(connection, requestBody);
+        PostHttpsRequestTask.sendPostRequestBodyToHttpsConnection(connection, requestBody, context);
 
         // validate the username and password for login
         String result = null;
@@ -119,9 +119,9 @@ public class LogInTask extends AsyncTask<String, String, String> {
             if (response != null && (response.get(MESSAGE).equals(SMS_SUCCEED) || response.get(MESSAGE).equals(LOGIN_SUCCEED))) {
                 Log.i("loginActivity","SUCCEED in login with request: " + requestBody);
 
-                String userName = extractUserNameFromRequest(requestBody);
-                UserInfo.setUserName(this.context, userName);
-                Log.i("loginActivity", "Stored user name as preference.");
+                String token = extractUserTokenFromResponse(response);
+                UserInfo.setToken(this.context, token);
+                Log.i("loginActivity", "Stored user token as preference: " + token);
 
                 startNavigationActivity();
             } else if (!response.get(MESSAGE).equals(LOGIN_SUCCEED)) {
@@ -154,9 +154,7 @@ public class LogInTask extends AsyncTask<String, String, String> {
         return sb.toString();
     }
 
-    private String extractUserNameFromRequest(String requestBody) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode request = mapper.readTree(requestBody);
-        return request.get(LOGIN_TARGET).asText();
+    private String extractUserTokenFromResponse(JSONObject response) throws IOException, JSONException {
+        return ((JSONObject) response.get("data")).getString("token");
     }
 }

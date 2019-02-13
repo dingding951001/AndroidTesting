@@ -60,11 +60,13 @@ public class LoadProjectListDataTask extends AsyncTask<String, Void, Void> {
     private View view;
     private ProjectFragment projectFragment;
     private ProgressBar mProgressBar;
+    private Context context;
 
     public LoadProjectListDataTask(View view, Context context, ProjectFragment fragment) {
         Log.i("LoadProjectList", "in the constructor");
         this.view = view;
         this.projectFragment = fragment;
+        this.context = context;
     }
 
     @Override
@@ -269,7 +271,7 @@ public class LoadProjectListDataTask extends AsyncTask<String, Void, Void> {
         }
 
         // send the request body to Https
-        PostHttpsRequestTask.sendPostRequestBodyToHttpsConnection(connection, request);
+        PostHttpsRequestTask.sendPostRequestBodyToHttpsConnection(connection, request, context);
 
         // validate the username and password for login
         String result = null;

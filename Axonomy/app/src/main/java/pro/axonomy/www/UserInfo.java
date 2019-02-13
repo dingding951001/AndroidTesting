@@ -7,22 +7,22 @@ import android.util.Log;
 
 public class UserInfo {
 
-    static final String PREF_USER_NAME = null;
+    static final String AUTHORIZATION = null;
 
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
-    public static void setUserName(Context ctx, String userName)
+    public static void setToken(Context ctx, String token)
     {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-        editor.putString(PREF_USER_NAME, userName);
+        editor.putString(AUTHORIZATION, token);
         editor.commit();
-        Log.i("UserInfo", "Store user info with name: " + userName);
+        Log.i("UserInfo", "Store user info with token: " + token);
     }
 
-    public static String getUserName(Context ctx)
+    public static String getAuthorization(Context ctx)
     {
-        return getSharedPreferences(ctx).getString(PREF_USER_NAME, "");
+        return getSharedPreferences(ctx).getString(AUTHORIZATION, "");
     }
 }

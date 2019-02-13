@@ -67,7 +67,11 @@ public class SMSTask extends AsyncTask<String, String, String> {
 
         // send the request body to Https
         String requestBody = param[0];
-        PostHttpsRequestTask.sendPostRequestBodyToHttpsConnection(connection, requestBody);
+        if (emailActivity != null) {
+            PostHttpsRequestTask.sendPostRequestBodyToHttpsConnection(connection, requestBody, emailActivity.getBaseContext());
+        } else if (mobileActivity != null ) {
+            PostHttpsRequestTask.sendPostRequestBodyToHttpsConnection(connection, requestBody, mobileActivity.getBaseContext());
+        }
 
         // validate the username and password for login
         String result = null;
