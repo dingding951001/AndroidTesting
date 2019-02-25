@@ -33,6 +33,8 @@ public class GetHttpUrlRequestTask extends AsyncTask<String, String, String> {
             if (!TextUtils.isEmpty(UserInfo.getAuthorization(context))) {
                 urlConnection.setRequestProperty("authorization", UserInfo.getAuthorization(context));
             }
+            urlConnection.setRequestProperty("lang", "en");
+
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 

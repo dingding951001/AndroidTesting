@@ -7,9 +7,6 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -154,7 +151,7 @@ public class LogInTask extends AsyncTask<String, String, String> {
         return sb.toString();
     }
 
-    private String extractUserTokenFromResponse(JSONObject response) throws IOException, JSONException {
+    private String extractUserTokenFromResponse(JSONObject response) throws JSONException {
         return ((JSONObject) response.get("data")).getString("token");
     }
 }

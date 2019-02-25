@@ -1,6 +1,5 @@
 package pro.axonomy.www.project;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +15,6 @@ import pro.axonomy.www.WebImageHandler;
 public class ProjectFragment extends Fragment {
 
     private static View projectFragmentView = null;
-    private Context _context = getContext();
     private ProjectFragment _fragment = this;
 
     @Override
@@ -35,7 +33,7 @@ public class ProjectFragment extends Fragment {
         latestProjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new LoadProjectListDataTask(v, _context, _fragment).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.LATEST);
+                new LoadProjectListDataTask(v, getContext(), _fragment).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.LATEST);
             }
         });
 
@@ -43,7 +41,7 @@ public class ProjectFragment extends Fragment {
         popularProjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new LoadProjectListDataTask(v, _context, _fragment).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.POPULAR);
+                new LoadProjectListDataTask(v, getContext(), _fragment).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.POPULAR);
             }
         });
 
@@ -51,7 +49,7 @@ public class ProjectFragment extends Fragment {
         ratingProjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new LoadProjectListDataTask(v, _context, _fragment).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.RATING);
+                new LoadProjectListDataTask(v, getContext(), _fragment).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.RATING);
             }
 
         });
