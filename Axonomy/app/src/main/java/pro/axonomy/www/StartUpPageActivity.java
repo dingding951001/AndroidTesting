@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
-import pro.axonomy.www.login.MobileLoginActivity;
-
 public class StartUpPageActivity extends Activity {
 
     @Override
@@ -20,8 +18,8 @@ public class StartUpPageActivity extends Activity {
             handler.postDelayed(new Runnable() {
                 public void run() {
                     finish();
-                    Intent mobileLoginActivity = new Intent(getBaseContext(), MobileLoginActivity.class);
-                    startActivity(mobileLoginActivity);
+                    Intent bottomNavigationActivity = new Intent(getBaseContext(), BottomNavigationActivity.class);
+                    startActivity(bottomNavigationActivity);
                 }
             }, 2000);
         } else {
@@ -29,8 +27,8 @@ public class StartUpPageActivity extends Activity {
             handler.postDelayed(new Runnable() {
                 public void run() {
                     finish();
-                    Intent mobileLoginActivity = new Intent(getBaseContext(), BottomNavigationActivity.class);
-                    startActivity(mobileLoginActivity);
+                    Intent bottomNavigationActivity = new Intent(getBaseContext(), BottomNavigationActivity.class);
+                    startActivity(bottomNavigationActivity);
                 }
             }, 2000);
         }

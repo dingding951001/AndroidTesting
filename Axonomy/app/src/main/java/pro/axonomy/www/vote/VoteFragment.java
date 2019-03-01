@@ -52,12 +52,6 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         view = inflater.inflate(R.layout.fragment_vote, container, false);
 
-        return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         try {
             generateBanner(view);
             generateVotingRoundsView(view);
@@ -68,7 +62,24 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        return view;
     }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        try {
+//            generateBanner(view);
+//            generateVotingRoundsView(view);
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
@@ -97,6 +108,7 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     private void generateVotingRoundsView(View view) {
         try {
             String votingRoundsData = new GetHttpUrlRequestTask(getContext()).execute(VOTE_URL_LOGOUT).get();
+            Log.i("GenerateRoundsData", "Received response with data: " + votingRoundsData);
             JSONObject votingRoundsJson = new JSONObject(votingRoundsData);
             JSONObject votingData = (JSONObject) votingRoundsJson.get(DATA);
             JSONArray votingItems = (JSONArray) votingData.get("items");
@@ -134,6 +146,7 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
                 LinearLayout historyRevenueCard = historyRoundLayout.findViewById(R.id.revenue_card);
                 historyRevenueCard.addView(revenueCardLayout);
 
+                Log.i("addView", "add round " + i);
                 voteContainer.addView(historyRoundLayout);
             }
 
@@ -147,14 +160,28 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     }
 
     private void setCurrentRound(View view, JSONObject data) throws JSONException {
+        Log.i("setCurrentRound", "start to set current round");
         int sequence = data.getInt("seq");
         TextView round = view.findViewById(R.id.current_round);
         round.setText("ROUND " + sequence);
 
         setCurrentTimeline(view, data);
         setCurrentActivity(view, data);
-        setCurrentRevenue(view, data);
-        setCurrentBalance(view, data);
+        JSONObject revenueData = data.getJSONObject("revenue_card");
+        if (revenueData.getString("type").equals("text")) {
+            LinearLayout currentRevenueCard = view.findViewById(R.id.current_revenue_card);
+            currentRevenueCard.setVisibility(View.GONE);
+            setCurrentRevenueText(view, revenueData);
+        } else {
+            LinearLayout currentRevenueTextCard = view.findViewById(R.id.current_revenue_text_card);
+            currentRevenueTextCard.setVisibility(View.GONE);
+            setCurrentRevenue(view, revenueData);
+        }
+        setCurrentVote(view, data);
+        JSONObject balanceData = data.getJSONObject("balance_card");
+        if (balanceData.getString("type").equals("not_login")) {
+            setCurrentBalance(view, balanceData);
+        }
     }
 
     private void setCurrentTimeline(View view, JSONObject data) throws JSONException {
@@ -163,17 +190,29 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         LinearLayout timelineCard = view.findViewById(R.id.current_timeline_card);
         if (timelineType.equals("comming_soon")) {
+            Log.i("setCurrentTimeline", "timeline type is comming_soon");
             LinearLayout startingSoonLayout = new LinearLayout(getActivity());
             View startingSoonView = view.inflate(getActivity(), R.layout.timeline_starting_soon, startingSoonLayout);
             TextView startingSoonText = startingSoonView.findViewById(R.id.starting_soon_text);
             startingSoonText.setText(timelineData.getString("text"));
             timelineCard.addView(startingSoonView);
+        } else if (timelineType.equals("detail")) {
+            Log.i("setCurrentTimeline", "timeline type is detail");
+            LinearLayout timelineCardLayout = new LinearLayout(getActivity());
+            View timelineCardView = view.inflate(getActivity(), R.layout.timeline_card, timelineCardLayout);
+            setTimelineCard(timelineCardView, timelineData);
+            timelineCard.addView(timelineCardView);
         }
     }
 
     private void setCurrentActivity(View view, JSONObject data) throws JSONException {
-        TableLayout activityTable = (TableLayout) view.findViewById(R.id.table_current_activity);
         JSONObject activityData = data.getJSONObject("activity_card");
+        if (activityData.length() == 0) {
+            LinearLayout currentActivityCard = view.findViewById(R.id.current_activity_card);
+            currentActivityCard.setVisibility(View.GONE);
+            return;
+        }
+        TableLayout activityTable = (TableLayout) view.findViewById(R.id.table_current_activity);
         TextView activityTitle = view.findViewById(R.id.current_activity_title);
         activityTitle.setText(activityData.getString("title"));
         TextView activityLabel = view.findViewById(R.id.current_activity_label);
@@ -195,22 +234,53 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         }
     }
 
-    private void setCurrentRevenue(View view, JSONObject data) throws JSONException {
-        JSONObject revenueData = data.getJSONObject("revenue_card");
+    private void setCurrentRevenueText(View view, JSONObject revenueData) throws JSONException {
+        String title = revenueData.getString("title");
+        String tips = revenueData.getString("tips");
+
+        TextView revenueTitle = view.findViewById(R.id.current_revenue_text_title);
+        revenueTitle.setText(title);
+        TextView revenueTips = view.findViewById(R.id.current_revenue_text_tip);
+        revenueTips.setText(tips);
+    }
+
+    private void setCurrentRevenue(View view, JSONObject revenueData) throws JSONException {
         TextView revenueTitle = view.findViewById(R.id.current_revenue_title);
         revenueTitle.setText(revenueData.getString("title"));
         TextView revenueTip = view.findViewById(R.id.current_revenue_tip);
         revenueTip.setText(revenueData.getString("tips"));
-        TextView revenueItemLeft = view.findViewById(R.id.current_revenue_item_left);
+        TextView revenueItemLeft = view.findViewById(R.id.current_vote_item_left);
         revenueItemLeft.setText(revenueData.getJSONArray("items").getJSONObject(0).getString("content"));
-        TextView revenueItemRight = view.findViewById(R.id.current_revenue_item_right);
+        TextView revenueItemRight = view.findViewById(R.id.current_vote_item_right);
         revenueItemRight.setText(revenueData.getJSONArray("items").getJSONObject(1).getString("content"));
-        TextView revenueCost = view.findViewById(R.id.current_revenue_cost);
+        TextView revenueCost = view.findViewById(R.id.current_vote_cost);
         revenueCost.setText(revenueData.getString("cost"));
     }
 
-    private void setCurrentBalance(View view, JSONObject data) throws JSONException {
-        JSONObject balanceData = data.getJSONObject("balance_card");
+    private void setCurrentVote(View view, JSONObject data) throws JSONException {
+        JSONObject voteData = data.getJSONObject("vote_card");
+        LinearLayout currentVoteCard = view.findViewById(R.id.current_vote_card);
+        if (voteData.length() == 0) {
+            currentVoteCard.setVisibility(View.GONE);
+            return;
+        }
+
+        setVoteCard(currentVoteCard, voteData);
+
+        SliderLayout currentVoteBannerSlider = view.findViewById(R.id.current_vote_banner);
+        JSONArray bannerData = (JSONArray) voteData.get("banner");
+        for(int i=0; i< bannerData.length(); i++) {
+            JSONObject banner = bannerData.getJSONObject(i);
+            final String imageUrl = banner.get("img").toString();
+            TextSliderView textSliderView = new TextSliderView(getActivity());
+            textSliderView
+                    .image(imageUrl)
+                    .setScaleType(BaseSliderView.ScaleType.Fit);
+            currentVoteBannerSlider.addSlider(textSliderView);
+        }
+    }
+
+    private void setCurrentBalance(View view, JSONObject balanceData) throws JSONException {
         TextView balanceTitle = view.findViewById(R.id.current_balance_title);
         balanceTitle.setText(balanceData.getString("title"));
         TextView balanceAmount = view.findViewById(R.id.current_balance_amount);
