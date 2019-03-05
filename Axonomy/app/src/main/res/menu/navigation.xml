@@ -12,6 +12,11 @@
         android:title="@string/title_project" />
 
     <item
+        android:id="@+id/navigation_updates"
+        android:icon="@mipmap/updates_normal"
+        android:title="@string/title_updates" />
+
+    <item
         android:id="@+id/navigation_me"
         android:icon="@mipmap/me_normal"
         android:title="@string/title_me" />

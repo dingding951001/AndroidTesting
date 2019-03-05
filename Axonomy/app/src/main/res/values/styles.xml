@@ -10,4 +10,9 @@
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#E0DDEE</item>
+        <item name="colorControlActivated">#F5A623</item>
+    </style>
+
 </resources>

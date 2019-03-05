@@ -19,5 +19,6 @@
     <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
     <string name="title_vote">VOTE</string>
     <string name="title_project">PROJECT</string>
+    <string name="title_updates">UPDATES</string>
     <string name="title_me">ME</string>
 </resources>

@@ -1,7 +1,5 @@
 package pro.axonomy.www.me;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -47,10 +44,7 @@ public class MeFragment extends Fragment {
             final JSONObject response = new JSONObject(new GetHttpUrlRequestTask(getContext()).execute(DBA_MENU_URL).get());
             Log.i("UserFragmentView", "Received the data for DBA User Menu: " + response);
 
-            String jsonString = "{\"code\":200,\"message\":\"success\",\"data\":[{\"icon\":\"https://img.aceport.com/28216316377933626.png\",\"title\":\"邀请好友\",\"path\":\"#/invite\",\"android_path\":null,\"ios_path\":\"jump://DBMineInviteViewController\",\"wx_path\":\"/pages/invite/main\",\"paras\":\"\",\"desc\":\"\"},{\"icon\":\"https://img.aceport.com/6736554685113474.png\",\"title\":\"推荐项目\",\"path\":\"https://mp.weixin.qq.com/s/GtzrC0GiQJ-5GWmR9Z0xnQ\",\"android_path\":null,\"ios_path\":\"jump://DBMainWebViewController?urlString=https://mp.weixin.qq.com/s/GtzrC0GiQJ-5GWmR9Z0xnQ&title=Axonomy\",\"wx_path\":null,\"paras\":\"\",\"desc\":\"推荐或录入项目，可获得DBA代币奖励\"},{\"icon\":\"https://img.aceport.com/28216316377933626.png\",\"title\":\"邀请好友\",\"path\":\"#/invite\",\"android_path\":null,\"ios_path\":\"jump://DBMineInviteViewController\",\"wx_path\":\"/pages/invite/main\",\"paras\":\"\",\"desc\":\"\"},{\"icon\":\"https://img.aceport.com/6736554685113474.png\",\"title\":\"推荐项目\",\"path\":\"https://mp.weixin.qq.com/s/GtzrC0GiQJ-5GWmR9Z0xnQ\",\"android_path\":null,\"ios_path\":\"jump://DBMainWebViewController?urlString=https://mp.weixin.qq.com/s/GtzrC0GiQJ-5GWmR9Z0xnQ&title=Axonomy\",\"wx_path\":null,\"paras\":\"\",\"desc\":\"推荐或录入项目，可获得DBA代币奖励\"}]}";
-            JSONObject test = new JSONObject(jsonString);
-
-            populateUserTask(test, view, inflater);
+            populateUserTask(response, view, inflater);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
