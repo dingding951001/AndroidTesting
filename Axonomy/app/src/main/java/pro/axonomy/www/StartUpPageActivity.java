@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import pro.axonomy.www.login.MobileLoginActivity;
+
 public class StartUpPageActivity extends Activity {
 
     @Override
@@ -18,7 +20,7 @@ public class StartUpPageActivity extends Activity {
             handler.postDelayed(new Runnable() {
                 public void run() {
                     finish();
-                    Intent bottomNavigationActivity = new Intent(getBaseContext(), BottomNavigationActivity.class);
+                    Intent bottomNavigationActivity = new Intent(getBaseContext(), MobileLoginActivity.class);
                     startActivity(bottomNavigationActivity);
                 }
             }, 2000);

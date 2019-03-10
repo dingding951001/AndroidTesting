@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class UserInfo {
 
-    static final String AUTHORIZATION = null;
+    static final String AUTHORIZATION = "authorization";
 
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);

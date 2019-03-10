@@ -179,9 +179,7 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         }
         setCurrentVote(view, data);
         JSONObject balanceData = data.getJSONObject("balance_card");
-        if (balanceData.getString("type").equals("not_login")) {
-            setCurrentBalance(view, balanceData);
-        }
+        setCurrentBalance(view, balanceData);
     }
 
     private void setCurrentTimeline(View view, JSONObject data) throws JSONException {
