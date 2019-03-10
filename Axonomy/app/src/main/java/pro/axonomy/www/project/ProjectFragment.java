@@ -74,10 +74,10 @@ public class ProjectFragment extends Fragment {
                     new LoadProjectListDataTask(latestProjects, this.getContext(), this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.LATEST);
                 case POPULAR:
                     TextView popularProjects = (TextView) projectFragmentView.findViewById(R.id.popularProjects);
-                    new LoadProjectListDataTask(popularProjects, getContext(), _fragment).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.POPULAR);
+                    new LoadProjectListDataTask(popularProjects, this.getContext(), this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.POPULAR);
                 case RATING:
                     TextView ratingProjects = (TextView) projectFragmentView.findViewById(R.id.ratingProjects);
-                    new LoadProjectListDataTask(ratingProjects, getContext(), _fragment).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.RATING);
+                    new LoadProjectListDataTask(ratingProjects, this.getContext(), this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.RATING);
             }
 
         }
