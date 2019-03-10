@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * Used to store the {@link AsyncTask} with key linked to the img url
+ * When jumped to other views, will automatically cancel all current AsyncTask
+ * to avoid potential stuck or significantly slow down of the app
+ */
 public class WebImageHandler {
 
     public static HashMap<String, AsyncTask> UNFINISHED_ASYNC_TASKS = new HashMap<>();

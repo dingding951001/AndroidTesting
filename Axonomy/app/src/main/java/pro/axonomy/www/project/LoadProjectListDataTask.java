@@ -83,14 +83,17 @@ public class LoadProjectListDataTask extends AsyncTask<String, Void, Void> {
             switch (flag[0]) {
                 case POPULAR:
                     Log.i("LoadProjectList", "Load for popular list.");
+                    projectFragment.CURRENT_ACTIVE_TAB = ProjectType.POPULAR;
                     loadPopularProject();
                     break;
                 case LATEST:
                     Log.i("LoadProjectList", "Load for latest list.");
+                    projectFragment.CURRENT_ACTIVE_TAB = ProjectType.LATEST;
                     loadLatestProject();
                     break;
                 case RATING:
                     Log.i("LoadProjectList", "Load for rating list.");
+                    projectFragment.CURRENT_ACTIVE_TAB = ProjectType.RATING;
                     loadRatingProject();
                     break;
                 default:

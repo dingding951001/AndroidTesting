@@ -48,8 +48,6 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
 
-        WebImageHandler.clearUnfinishedAsyncTaskList();
-
         view = inflater.inflate(R.layout.fragment_vote, container, false);
 
         try {
@@ -65,21 +63,6 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         return view;
     }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        try {
-//            generateBanner(view);
-//            generateVotingRoundsView(view);
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
