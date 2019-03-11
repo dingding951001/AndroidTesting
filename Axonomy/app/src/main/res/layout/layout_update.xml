@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/rounded_layout"
+    android:layout_marginTop="15dp"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +16,6 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
             android:src="@mipmap/logo_round"/>
 
         <LinearLayout
@@ -30,7 +32,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Max Lee"
+                    android:id="@+id/update_author"
                     android:textColor="#ff333333"
                     android:textSize="12sp"
                     />
@@ -47,7 +49,7 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="2018/06/27 11:23"
+                android:id="@+id/update_time"
                 android:textColor="#ff999999"
                 android:textSize="10sp"
                 />
@@ -57,12 +59,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/update_subject">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:padding="5dp"
             android:background="@drawable/light_blue_layout"
             android:orientation="horizontal">
@@ -78,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="3dp"
-                android:text="8th Round Voting Red Wallet Hunt"
+                android:id="@+id/update_subject_title"
                 android:textColor="#ff6b7db5"
                 android:textSize="12sp"
                 />
@@ -92,57 +94,46 @@
         android:layout_height="wrap_content">
 
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/update_ratingBar"
             style = "?android:attr/ratingBarStyleSmall"
             android:theme="@style/RatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
             android:isIndicator="true"
             android:numStars="5"
             android:stepSize="0.1"
-            android:rating="4.5"
             />
 
     </LinearLayout>
 
     <TextView
-        android:layout_width="355dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_gravity="center_horizontal"
-        android:text=" Trustwallet is fast and secure Ethereum wallet that’s easy to use. ERC20 Compatible low fee transaction like imToken good wallet i think"
+        android:id="@+id/update_content"
         android:textColor="#ff333333"
         android:textSize="14sp"
-        />
-
-    <TextView
-        android:layout_width="298dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_gravity="center_horizontal"
-        android:text="Trust Wallet product testing Installation was easy The wallet is user-friendly It supports decentralized exchange but the user experience is mediocre It supports DAPP but flawed I didn't experience any innovative features"
-        android:textColor="#ffaeaeae"
-        android:textSize="12sp"
         />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:gravity="right">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="300dp"
+            android:layout_marginRight="15dp"
             android:src="@mipmap/like"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginRight="5dp"
             android:src="@mipmap/comment"/>
 
     </LinearLayout>
@@ -156,8 +147,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/liked"
-            android:layout_marginLeft="15dp"/>
+            android:src="@mipmap/liked"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -168,7 +158,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Alexa, 87863, Rus, gh6988, testtest and 97 others liked the post"
+                android:id="@+id/update_liked_users"
                 android:textColor="#ff333333"
                 android:textSize="14sp"
                 />
@@ -180,31 +170,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="355dp"
-                android:layout_height="wrap_content"
-                android:text="Amina_Ree: this is a very long long long long long long comment."
-                android:textColor="#ff6b7db5"
-                android:textSize="14sp"
-                />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="View More >>"
-                android:textColor="#ff6b7db5"
-                android:textSize="14sp" />
-        </TableRow>
+        android:id="@+id/update_comment_table">
 
     </TableLayout>
 

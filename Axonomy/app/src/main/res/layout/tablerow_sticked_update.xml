@@ -1,0 +1,33 @@
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:paddingVertical="10dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_weight="0.1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/light_purple_round_border"
+        android:padding="2dp"
+        android:gravity="center"
+        android:text="Top"
+        android:textColor="#ff6a4eff"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/sticked_update_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_weight="0.9"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#ff333333"
+        android:textSize="15sp" />
+
+</TableRow>

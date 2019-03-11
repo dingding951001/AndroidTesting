@@ -6,9 +6,39 @@
     tools:context="pro.axonomy.www.updates.UpdatesFragment"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="updates"/>
+    <pro.axonomy.www.utils.observableScrollView.ObservableScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/update_scroll_view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:id="@+id/sticked_update_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_layout"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle">
+
+
+            </TableLayout>
+
+            <LinearLayout
+                android:id="@+id/nonsticked_update_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </pro.axonomy.www.utils.observableScrollView.ObservableScrollView>
 
 </LinearLayout>
