@@ -16,6 +16,8 @@ import java.util.Map;
 public class WebImageHandler {
 
     public static HashMap<String, AsyncTask> UNFINISHED_ASYNC_TASKS = new HashMap<>();
+
+    // Served as local cache for all image/logo bitmap
     public static HashMap<String, Bitmap> WEB_IMAGE_MAP = new HashMap<>();
 
     public static void clearUnfinishedAsyncTaskList() {

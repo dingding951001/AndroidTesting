@@ -6,6 +6,10 @@ import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+/**
+ * View created when clicking the App logo generated under the {@link pro.axonomy.www.project.ProjectFragment}
+ * by using their corresponding image url
+ */
 public class WebViewActivity extends AppCompatActivity {
 
     public static final String URL_PARAM = "url";

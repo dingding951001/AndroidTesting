@@ -31,9 +31,6 @@ import pro.axonomy.www.LoadImageFromURLTask;
 import pro.axonomy.www.R;
 import pro.axonomy.www.WebImageHandler;
 
-/**
- * Created by xingyuanding on 1/12/19.
- */
 public class VoteFragment extends Fragment implements BaseSliderView.OnSliderClickListener {
 
     private SliderLayout mSlider;
@@ -41,27 +38,39 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     private static final String VOTE_URL_LOGOUT = "https://wx.aceport.com/api/v1/integration/voting/rounds";
     private static final String DATA = "data";
 
-    private static View view = null;
+    private static View voteFragmentView = null;
+
+    private static boolean FIRST_LOAD = true;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_vote, container, false);
-
-        try {
-            generateBanner(view);
-            generateVotingRoundsView(view);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (voteFragmentView != null) {
+            return voteFragmentView;
         }
 
-        return view;
+        voteFragmentView = inflater.inflate(R.layout.fragment_vote, container, false);
+        return voteFragmentView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (FIRST_LOAD) {
+            try {
+                generateBanner(voteFragmentView);
+                generateVotingRoundsView(voteFragmentView);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            FIRST_LOAD = false;
+        }
     }
 
     @Override
@@ -71,6 +80,7 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
 
     private void generateBanner(View view) throws ExecutionException, InterruptedException, JSONException {
         mSlider = view.findViewById(R.id.slider);
+
         JSONObject response = new JSONObject(new GetHttpUrlRequestTask(getContext()).execute(BANNER_URL).get());
         JSONArray bannerData = (JSONArray) response.get(DATA);
         Log.i("GenerateBanner", "Received response with data: " + bannerData.toString());
@@ -100,6 +110,7 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
             setCurrentRound(view, currentRound);
 
             LinearLayout voteContainer = view.findViewById(R.id.vote_container);
+
             for (int i = 1; i < votingItems.length(); i++)
             {
                 JSONObject votingItem = votingItems.getJSONObject(i);

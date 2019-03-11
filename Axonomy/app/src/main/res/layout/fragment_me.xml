@@ -6,6 +6,15 @@
     tools:context="pro.axonomy.www.me.MeFragment"
     android:orientation="vertical">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="visible" />
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="match_parent">

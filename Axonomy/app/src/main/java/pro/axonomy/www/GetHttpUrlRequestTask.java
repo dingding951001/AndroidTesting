@@ -1,9 +1,13 @@
 package pro.axonomy.www;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -15,6 +19,20 @@ import java.net.URL;
 public class GetHttpUrlRequestTask extends AsyncTask<String, String, String> {
 
     private Context context;
+    public View parentView = null;
+    public LayoutInflater inflater = null;
+    public ProgressBar progressBar;
+
+    public GetHttpUrlRequestTask(Context context, View view, LayoutInflater inflater) {
+        this.context = context;
+        this.parentView = view;
+        this.inflater = inflater;
+    }
+
+    public GetHttpUrlRequestTask(Context context, View view) {
+        this.context = context;
+        this.parentView = view;
+    }
 
     public GetHttpUrlRequestTask(Context context) {
         this.context = context;

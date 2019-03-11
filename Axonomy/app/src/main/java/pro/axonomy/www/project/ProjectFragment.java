@@ -63,6 +63,12 @@ public class ProjectFragment extends Fragment {
         return projectFragmentView;
     }
 
+    /**
+     * When jumping to other Fragments from the navigation bar on the bottom (Vote, Update, Me),
+     * all AynscTasks will be cleared and no longer resumes after jumping back.
+     * Therefore, need to store the previous loading view type and restore the content after jumping back
+     * Notice: this issue will ONLY appear when jumping between bottom fragment (no issue when jumping between top tabs in PROJECT)
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -72,18 +78,24 @@ public class ProjectFragment extends Fragment {
                 case LATEST:
                     TextView latestProjects = (TextView) projectFragmentView.findViewById(R.id.latestProjects);
                     new LoadProjectListDataTask(latestProjects, this.getContext(), this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.LATEST);
+                    break;
                 case POPULAR:
                     TextView popularProjects = (TextView) projectFragmentView.findViewById(R.id.popularProjects);
                     new LoadProjectListDataTask(popularProjects, this.getContext(), this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.POPULAR);
+                    break;
                 case RATING:
                     TextView ratingProjects = (TextView) projectFragmentView.findViewById(R.id.ratingProjects);
                     new LoadProjectListDataTask(ratingProjects, this.getContext(), this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LoadProjectListDataTask.RATING);
+                    break;
             }
-
         }
     }
 
-
+    /**
+     * Store the frag {@link #JUMPED_OUT_FRAGMENT}, refering that after jumping back to the Project,
+     * although {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)} will not be called,
+     * in the {@link #onStart()} function, the content will still be restored correctly.
+     */
     @Override
     public void onStop() {
         super.onStop();

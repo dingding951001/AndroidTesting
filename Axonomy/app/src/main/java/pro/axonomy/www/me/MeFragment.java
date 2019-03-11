@@ -1,6 +1,7 @@
 package pro.axonomy.www.me;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -33,72 +35,86 @@ public class MeFragment extends Fragment {
     private static final String IS_FACE_ID_URL = "https://wx.aceport.com/api/v1/user/isfaceId";
     private static final String DBA_MENU_URL = "https://wx.aceport.com/public/user/tasks";
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_me, container, false);
-        try {
-            String isFaceIdData = new GetHttpUrlRequestTask(getContext()).execute(IS_FACE_ID_URL).get();
-            Log.i("isFaceIdData", isFaceIdData);
 
-            final JSONObject response = new JSONObject(new GetHttpUrlRequestTask(getContext()).execute(DBA_MENU_URL).get());
-            Log.i("UserFragmentView", "Received the data for DBA User Menu: " + response);
+        //TODO: change the View Parameter for the constructor
+        AsyncTask<String, String, String> faceIdTask = new GetHttpUrlRequestTask(getContext(), this.getView()) {
+            @Override
+            public void onPostExecute(String result) {
+                //TODO: need to render the LinearLayout for top pop-up
+                Log.i("MeFragment:FaceIdData", result);
+            }
+        };
 
-            populateUserTask(response, view, inflater);
+        AsyncTask<String, String, String> menuTask = new GetHttpUrlRequestTask(getContext(), view, inflater) {
+            @Override
+            protected void onPreExecute() {
+                this.progressBar = (ProgressBar) view.getRootView().findViewById(R.id.progress_bar);
+                this.progressBar.setVisibility(View.VISIBLE);
+            }
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            Log.e("UserFragmentView", "Error when getting the DBA Menu data: " + e.getMessage());
-            e.printStackTrace();
-        }
+            @Override
+            public void onPostExecute(String result) {
+                Log.i("MeFragment:MenuData", "Received the data for DBA User Menu: " + result);
+                this.progressBar.setVisibility(View.GONE);
+                try {
+                    final JSONObject menu = new JSONObject(result);
+                    final JSONArray menuData = menu.getJSONArray("data");
+
+                    final TableLayout table = this.parentView.findViewById(R.id.user_task_table);
+                    for (int i = 0; i < menuData.length(); i += 3) {
+                        if (i != 0) {
+                            TableRow separatorRow = (TableRow) this.inflater.inflate(R.layout.tablerow_separator, null, false);
+                            table.addView(separatorRow);
+                        }
+                        TableRow currentRow = (TableRow) this.inflater.inflate(R.layout.tablerow_user_tasks, null, false);
+                        for (int j = 0; j < 3 && i + j < menuData.length(); j++) {
+                            final String imageUrl = ((JSONObject) menuData.get(i + j)).getString("icon");
+                            final String title = ((JSONObject) menuData.get(i + j)).getString("title");
+                            TextView menuText;
+                            ImageView menuImg;
+                            View separator;
+                            switch (j) {
+                                case 0:
+                                    menuText = currentRow.findViewById(R.id.user_task_txt_0);
+                                    menuText.setText(title);
+                                    menuImg = currentRow.findViewById(R.id.user_task_img_0);
+                                    WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
+                                    separator = currentRow.findViewById(R.id.separator_0);
+                                    separator.setBackgroundColor(Color.parseColor("#EFEFEF"));
+                                    break;
+                                case 1:
+                                    menuText = currentRow.findViewById(R.id.user_task_txt_1);
+                                    menuText.setText(title);
+                                    menuImg = currentRow.findViewById(R.id.user_task_img_1);
+                                    WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
+                                    separator = currentRow.findViewById(R.id.separator_1);
+                                    separator.setBackgroundColor(Color.parseColor("#EFEFEF"));
+                                    break;
+                                default:
+                                    menuText = currentRow.findViewById(R.id.user_task_txt_2);
+                                    menuText.setText(title);
+                                    menuImg = currentRow.findViewById(R.id.user_task_img_2);
+                                    WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
+                            }
+                        }
+                        table.addView(currentRow);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+
+        faceIdTask.execute(IS_FACE_ID_URL);
+        menuTask.execute(DBA_MENU_URL);
 
         return view;
     }
-
-    private void populateUserTask(final JSONObject menuResponse, final View view, LayoutInflater inflater) throws JSONException {
-        final JSONArray menuData = menuResponse.getJSONArray("data");
-        final TableLayout table = view.findViewById(R.id.user_task_table);
-        for (int i=0; i<menuData.length(); i+=3) {
-            if (i != 0) {
-                TableRow separatorRow = (TableRow) inflater.inflate(R.layout.tablerow_separator, null, false);
-                table.addView(separatorRow);
-            }
-            TableRow currentRow = (TableRow) inflater.inflate(R.layout.tablerow_user_tasks, null, false);
-            for (int j=0; j<3 && i+j<menuData.length(); j++) {
-                final String imageUrl = ((JSONObject) menuData.get(i+j)).getString("icon");
-                final String title = ((JSONObject) menuData.get(i+j)).getString("title");
-                TextView menuText;
-                ImageView menuImg;
-                View separator;
-                switch (j) {
-                    case 0:
-                        menuText = currentRow.findViewById(R.id.user_task_txt_0);
-                        menuText.setText(title);
-                        menuImg = currentRow.findViewById(R.id.user_task_img_0);
-                        WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
-                        separator = currentRow.findViewById(R.id.separator_0);
-                        separator.setBackgroundColor(Color.parseColor("#EFEFEF"));
-                        break;
-                    case 1:
-                        menuText = currentRow.findViewById(R.id.user_task_txt_1);
-                        menuText.setText(title);
-                        menuImg = currentRow.findViewById(R.id.user_task_img_1);
-                        WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
-                        separator = currentRow.findViewById(R.id.separator_1);
-                        separator.setBackgroundColor(Color.parseColor("#EFEFEF"));
-                        break;
-                    default:
-                        menuText = currentRow.findViewById(R.id.user_task_txt_2);
-                        menuText.setText(title);
-                        menuImg = currentRow.findViewById(R.id.user_task_img_2);
-                        WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
-                }
-            }
-            table.addView(currentRow);
-        }
-    }
-
 }

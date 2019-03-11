@@ -25,6 +25,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
     private static String fragmentTag;
     private String FRAGMENT_TAG_KEY = "fragment-tag";
 
+    public static VoteFragment VOTE_FRAGMENT = new VoteFragment();
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
