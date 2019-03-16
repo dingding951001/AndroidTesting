@@ -31,7 +31,7 @@ import pro.axonomy.www.utils.observableScrollView.ScrollViewListener;
 public class UpdatesFragment extends Fragment implements ScrollViewListener {
 
     private int updateCount;
-    private int page = 0;
+    private int page;
     private ObservableScrollView scrollView;
     private static final int pageSize = 10;
     private static final String TREND_URL = "https://wx.aceport.com/api/v1/trends?page=%d&page_size=%d&sticked=%d";
@@ -41,6 +41,7 @@ public class UpdatesFragment extends Fragment implements ScrollViewListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_updates, container, false);
         scrollView = view.findViewById(R.id.update_scroll_view);
+        page = 0;
 
         try {
             final String stickedUrl = String.format(TREND_URL, page, pageSize, 1);
