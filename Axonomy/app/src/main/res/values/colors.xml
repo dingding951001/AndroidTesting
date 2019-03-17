@@ -5,4 +5,5 @@
     <color name="colorAccent">#333333</color>
     <color name="colorNavClicked">#6A4EFF</color>
     <color name="colorNavProjectUnclicked">#A7A4B6</color>
+    <color name="colorLinkText">#ff6b7db5</color>
 </resources>
