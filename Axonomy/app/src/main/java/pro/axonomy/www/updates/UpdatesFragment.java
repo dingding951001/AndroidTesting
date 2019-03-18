@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -26,9 +27,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import pro.axonomy.www.GetHttpUrlRequestTask;
 import pro.axonomy.www.LoadImageFromURLTask;
@@ -220,14 +218,16 @@ public class UpdatesFragment extends Fragment implements ScrollViewListener {
     @Override
     public void onScrollEnded(final ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
         Log.d("onScrollEnded", "onScrollEnded");
-        int numItems = (page + 1) * pageSize;
-        if (numItems < updateCount) {
-            final String nonStickedUrl = String.format(TREND_URL, page + 1, pageSize, 0);
+        page += 1;
+        int numItems = page * pageSize;
+        final ProgressBar bottomProgressBar = scrollView.getRootView().findViewById(R.id.progress_bar_bottom);
+        if (bottomProgressBar.getVisibility() == View.GONE && numItems < updateCount) {
+            final String nonStickedUrl = String.format(TREND_URL, page, pageSize, 0);
 
             final GetHttpUrlRequestTask loadMoreAsyncTask = new GetHttpUrlRequestTask(getContext(), scrollView) {
                 @Override
                 protected void onPreExecute() {
-                    this.progressBar = scrollView.getRootView().findViewById(R.id.progress_bar_bottom);
+                    this.progressBar = bottomProgressBar;
                     this.progressBar.setVisibility(View.VISIBLE);
                 }
 
@@ -237,14 +237,14 @@ public class UpdatesFragment extends Fragment implements ScrollViewListener {
                     try {
                         final JSONObject nonstickedData = new JSONObject(result);
                         populateNonStickedView(scrollView, nonstickedData);
-                        page += 1;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             };
-
             loadMoreAsyncTask.execute(nonStickedUrl);
+        } else {
+            page -= 1;
         }
     }
 

@@ -49,16 +49,16 @@
 
             </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/progress_bar_bottom"
+                style="@style/Base.Widget.AppCompat.ProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:visibility="gone" />
+
         </LinearLayout>
     </pro.axonomy.www.utils.observableScrollView.ObservableScrollView>
-
-    <ProgressBar
-        android:id="@+id/progress_bar_bottom"
-        style="@style/Base.Widget.AppCompat.ProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:visibility="gone" />
 
 </LinearLayout>
