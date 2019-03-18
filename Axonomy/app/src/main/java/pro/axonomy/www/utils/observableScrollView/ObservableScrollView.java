@@ -31,6 +31,7 @@ public class ObservableScrollView extends ScrollView {
 
         View view = (View) getChildAt(getChildCount() - 1);
         int diff = (view.getBottom() - (getHeight() + getScrollY()));
+        Log.d("onScrollChanged", "" + diff);
         if (diff <= 0) {
             if (scrollViewListener != null) {
                 scrollViewListener.onScrollEnded(this, x, y, oldx, oldy);

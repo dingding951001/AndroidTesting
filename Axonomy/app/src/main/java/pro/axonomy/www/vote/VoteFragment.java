@@ -1,6 +1,7 @@
 package pro.axonomy.www.vote;
 
 import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import pro.axonomy.www.GetHttpUrlRequestTask;
@@ -39,6 +42,7 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     private static final String DATA = "data";
 
     private static View voteFragmentView = null;
+    private static Map<String, LoadImageFromURLTask> UNFINISHED_ASYNC_TASKS;
 
     private static boolean FIRST_LOAD = true;
 
@@ -55,6 +59,10 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         return voteFragmentView;
     }
 
+    /**
+     * Generate the BANNER and VOTING_ROUNDS_VIEW when first created the fragment (put in {@link #onStart()} to avoid hangup)
+     * but reload unfinished images/logo whenever started or returned from other activities/fragments
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -70,7 +78,29 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
                 e.printStackTrace();
             }
             FIRST_LOAD = false;
+        } else if (UNFINISHED_ASYNC_TASKS != null) {
+            for (final Map.Entry<String, LoadImageFromURLTask> task : UNFINISHED_ASYNC_TASKS.entrySet()) {
+                Log.i("VoteFragReload", task.getKey());
+                task.getValue().execute(task.getKey());
+            }
         }
+    }
+
+    /**
+     * Store the UNFINISHED_ASYNC_TASKS into the fragment member fields,
+     * and will be re-executed when the fragment is re-started.
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Clone all AsyncTasks, the same task cannot be executed twice, each time start a new on with the same parameters
+        UNFINISHED_ASYNC_TASKS = new HashMap<String, LoadImageFromURLTask>() {{
+            for (final Entry<String, AsyncTask> task : WebImageHandler.UNFINISHED_ASYNC_TASKS.entrySet()) {
+                final LoadImageFromURLTask originalTask = (LoadImageFromURLTask) task.getValue();
+                put(task.getKey(), new LoadImageFromURLTask(originalTask.getImageView(), originalTask.getId()));
+            }
+        }};
+        WebImageHandler.clearUnfinishedAsyncTaskList();
     }
 
     @Override

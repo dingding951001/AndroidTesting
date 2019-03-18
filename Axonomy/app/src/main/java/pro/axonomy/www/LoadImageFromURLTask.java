@@ -68,4 +68,12 @@ public class LoadImageFromURLTask extends AsyncTask<String, Void, Bitmap> {
         }
         WebImageHandler.UNFINISHED_ASYNC_TASKS.remove(this.id);
     }
+
+    public ImageView getImageView() {
+        return this.imageView;
+    }
+
+    public String getId() {
+        return this.id;
+    }
 }

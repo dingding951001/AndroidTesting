@@ -31,5 +31,4 @@ public class WebImageHandler {
         }
         Log.i("ClearAsyncTask", "Clearance finished.");
     }
-
 }

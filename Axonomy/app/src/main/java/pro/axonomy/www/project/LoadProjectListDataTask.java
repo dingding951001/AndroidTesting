@@ -43,7 +43,6 @@ public class LoadProjectListDataTask extends AsyncTask<String, Void, Void> {
     private static final String PAGE_SIZE = "page_size";
     private static final String SORT = "sort";
 
-
     private static final String PROJECT_URL = "https://wx.aceport.com/public/project/items";
     private static final String MESSAGE = "message";
     private static final String SUCCESS = "OK";

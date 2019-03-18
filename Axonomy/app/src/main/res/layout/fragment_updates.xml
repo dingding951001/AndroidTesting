@@ -6,6 +6,17 @@
     tools:context="pro.axonomy.www.updates.UpdatesFragment"
     android:orientation="vertical">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleX="0.2"
+        android:scaleY="0.2"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="visible" />
+
     <pro.axonomy.www.utils.observableScrollView.ObservableScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,5 +51,14 @@
 
         </LinearLayout>
     </pro.axonomy.www.utils.observableScrollView.ObservableScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar_bottom"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
 </LinearLayout>

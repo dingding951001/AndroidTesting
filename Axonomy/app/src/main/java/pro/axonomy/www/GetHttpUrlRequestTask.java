@@ -1,6 +1,5 @@
 package pro.axonomy.www;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -15,8 +14,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.Callable;
 
-public class GetHttpUrlRequestTask extends AsyncTask<String, String, String> {
+public class GetHttpUrlRequestTask extends AsyncTask<String, String, String> implements Callable {
 
     private Context context;
     public View parentView = null;
@@ -74,5 +74,10 @@ public class GetHttpUrlRequestTask extends AsyncTask<String, String, String> {
             Log.e("GetHttpUrlTask", "EMPTY url for request.");
             throw new RuntimeException("Empty url, cannot perform GET request.");
         }
+    }
+
+    @Override
+    public Object call() {
+        return this.execute();
     }
 }

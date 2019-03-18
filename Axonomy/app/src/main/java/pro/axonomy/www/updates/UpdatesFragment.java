@@ -27,6 +27,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import pro.axonomy.www.GetHttpUrlRequestTask;
 import pro.axonomy.www.LoadImageFromURLTask;
@@ -51,35 +53,51 @@ public class UpdatesFragment extends Fragment implements ScrollViewListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_updates, container, false);
+        final View view = inflater.inflate(R.layout.fragment_updates, container, false);
         scrollView = view.findViewById(R.id.update_scroll_view);
+        scrollView.setScrollViewListener(this);
+
         page = 0;
 
-        try {
-            final String stickedUrl = String.format(TREND_URL, page, pageSize, 1);
-            final JSONObject stickedTrendData = new JSONObject(new GetHttpUrlRequestTask(getContext()).execute(stickedUrl).get());
-            Log.d("stickedTrendData", stickedTrendData.toString());
+        final String stickedUrl = String.format(TREND_URL, page, pageSize, 1);
+        final String nonStickedUrl = String.format(TREND_URL, page, pageSize, 0);
 
-            final String nonStickedUrl = String.format(TREND_URL, page, pageSize, 0);
-            final JSONObject nonStickedTrendData = new JSONObject(new GetHttpUrlRequestTask(getContext()).execute(nonStickedUrl).get());
-            Log.d("nonStickedTrendData", nonStickedTrendData.toString());
+        final GetHttpUrlRequestTask stickedDataAsyncTask = new GetHttpUrlRequestTask(getContext(), view) {
+            @Override
+            public void onPostExecute(final String result) {
+                try {
+                    final JSONObject stickedData = new JSONObject(result);
+                    populateStickedView(view, stickedData);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
 
-            populateView(view, stickedTrendData, nonStickedTrendData);
-            scrollView.setScrollViewListener(this);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+        final GetHttpUrlRequestTask nonstickedDataAsyncTask = new GetHttpUrlRequestTask(getContext(), view) {
+            @Override
+            protected void onPreExecute() {
+                this.progressBar = view.getRootView().findViewById(R.id.progress_bar);
+                this.progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPostExecute(final String result) {
+                this.progressBar.setVisibility(View.GONE);
+                try {
+                    final JSONObject nonstickedData = new JSONObject(result);
+                    populateNonStickedView(view, nonstickedData);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        stickedDataAsyncTask.execute(stickedUrl);
+        nonstickedDataAsyncTask.execute(nonStickedUrl);
 
         return view;
-    }
-
-    private void populateView(View view, JSONObject stickedTrendData, JSONObject nonStickedTrendData) throws JSONException {
-        populateStickedView(view, stickedTrendData);
-        populateNonStickedView(view, nonStickedTrendData);
     }
 
     private void populateStickedView(View view, JSONObject stickedTrendData) throws JSONException {
@@ -200,23 +218,33 @@ public class UpdatesFragment extends Fragment implements ScrollViewListener {
     }
 
     @Override
-    public void onScrollEnded(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
+    public void onScrollEnded(final ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
         Log.d("onScrollEnded", "onScrollEnded");
         int numItems = (page + 1) * pageSize;
         if (numItems < updateCount) {
-            try {
-                final String nonStickedUrl = String.format(TREND_URL, page + 1, pageSize, 0);
-                final JSONObject nonStickedTrendData;
-                nonStickedTrendData = new JSONObject(new GetHttpUrlRequestTask(getContext()).execute(nonStickedUrl).get());
-                populateNonStickedView(scrollView, nonStickedTrendData);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-            page += 1;
+            final String nonStickedUrl = String.format(TREND_URL, page + 1, pageSize, 0);
+
+            final GetHttpUrlRequestTask loadMoreAsyncTask = new GetHttpUrlRequestTask(getContext(), scrollView) {
+                @Override
+                protected void onPreExecute() {
+                    this.progressBar = scrollView.getRootView().findViewById(R.id.progress_bar_bottom);
+                    this.progressBar.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onPostExecute(final String result) {
+                    this.progressBar.setVisibility(View.GONE);
+                    try {
+                        final JSONObject nonstickedData = new JSONObject(result);
+                        populateNonStickedView(scrollView, nonstickedData);
+                        page += 1;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            loadMoreAsyncTask.execute(nonStickedUrl);
         }
     }
 

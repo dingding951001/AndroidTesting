@@ -25,8 +25,6 @@ public class ProjectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
 
-        WebImageHandler.clearUnfinishedAsyncTaskList();
-
         if (projectFragmentView != null) {
             return projectFragmentView;
         }
