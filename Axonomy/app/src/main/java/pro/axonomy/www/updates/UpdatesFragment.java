@@ -250,7 +250,6 @@ public class UpdatesFragment extends Fragment implements ScrollViewListener {
 
     class MyClickableSpan extends ClickableSpan {
         public void onClick(View textView) {
-            Log.i("onClick","MyClickableSpan on click");
             Intent userIntent = new Intent(getContext(), UserActivity.class);
             startActivity(userIntent);
         }

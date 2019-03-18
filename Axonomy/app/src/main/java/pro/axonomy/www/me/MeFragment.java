@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -19,34 +20,51 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.ExecutionException;
-
+import pro.axonomy.www.GeneralPostHttpRequestTask;
 import pro.axonomy.www.GetHttpUrlRequestTask;
 import pro.axonomy.www.LoadImageFromURLTask;
 import pro.axonomy.www.R;
 import pro.axonomy.www.WebImageHandler;
 
-/**
- * Created by xingyuanding on 1/12/19.
- */
-
 public class MeFragment extends Fragment {
 
-    private static final String IS_FACE_ID_URL = "https://wx.aceport.com/api/v1/user/isfaceId";
+    private static final String USER_METADATA_URL = "https://wx.aceport.com/public/user/meta";
     private static final String DBA_MENU_URL = "https://wx.aceport.com/public/user/tasks";
-
 
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_me, container, false);
 
-        //TODO: change the View Parameter for the constructor
-        AsyncTask<String, String, String> faceIdTask = new GetHttpUrlRequestTask(getContext(), this.getView()) {
+        AsyncTask<String, String, String> userMetaTask = new GeneralPostHttpRequestTask(getContext(), view, inflater) {
             @Override
             public void onPostExecute(String result) {
-                //TODO: need to render the LinearLayout for top pop-up
-                Log.i("MeFragment:FaceIdData", result);
+                Log.i("MeFragment:userMetadata", result);
+                try {
+                    final JSONObject userMetadata = new JSONObject(result).getJSONObject("data");
+                    LinearLayout toKycLayout = this.parentView.findViewById(R.id.to_kyc_layout);
+                    int kycStatus = userMetadata.getInt("kyc");
+                    if (kycStatus == -1 || kycStatus == 2) {
+                        toKycLayout.setVisibility(View.GONE);
+                    }
+
+                    String meImgUrl = userMetadata.getString("avatar");
+                    ImageView meImg = this.parentView.findViewById(R.id.me_img);
+                    WebImageHandler.UNFINISHED_ASYNC_TASKS.put(meImgUrl, new LoadImageFromURLTask(meImg, meImgUrl).execute(meImgUrl));
+
+                    String userName = userMetadata.getString("username");
+                    TextView meName = this.parentView.findViewById(R.id.me_name);
+                    meName.setText(userName);
+
+                    TextView meSignature = this.parentView.findViewById(R.id.me_signature);
+                    if (userMetadata.isNull("desc")) {
+                        meSignature.setText("No Info yet");
+                    } else {
+                        meSignature.setText(userMetadata.getString("desc"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -111,8 +129,7 @@ public class MeFragment extends Fragment {
             }
         };
 
-
-        faceIdTask.execute(IS_FACE_ID_URL);
+        userMetaTask.execute(USER_METADATA_URL);
         menuTask.execute(DBA_MENU_URL);
 
         return view;

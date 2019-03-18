@@ -12,24 +12,24 @@ public class PostHttpsRequestTask {
 
     public static void sendPostRequestBodyToHttpsConnection(HttpsURLConnection connection, String requestBody, Context context)  {
 
-        connection.setRequestProperty("Content-length", requestBody.getBytes().length + "");
         connection.setDoInput(true);
-        connection.setDoOutput(true);
         connection.setUseCaches(false);
         connection.setRequestProperty("Content-Type", "application/json");
         if (!TextUtils.isEmpty(UserInfo.getAuthorization(context))) {
             connection.setRequestProperty("authorization", UserInfo.getAuthorization(context));
         }
 
-        OutputStream outputStream= null;
-
-        try {
-            outputStream = connection.getOutputStream();
-            outputStream.write(requestBody.getBytes("UTF-8"));
-            outputStream.close();
-            connection.connect();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!TextUtils.isEmpty(requestBody)) {
+            try {
+                connection.setRequestProperty("Content-length", requestBody.getBytes().length + "");
+                connection.setDoOutput(true);
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(requestBody.getBytes("UTF-8"));
+                outputStream.close();
+                connection.connect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
