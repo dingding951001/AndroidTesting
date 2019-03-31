@@ -278,7 +278,8 @@
                     android:layout_width = "match_parent"
                     android:layout_height="1dp"
                     android:layout_centerVertical ="true"
-                    android:layout_alignParentTop="true" />
+                    android:layout_alignParentTop="true"
+                    android:id="@+id/winner_voting_project_separator"/>
 
                 <TableLayout
                     android:id="@+id/table_layout_vote_projects"
@@ -293,6 +294,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="15dp"
+                android:id="@+id/current_balance_layout"
                 android:background="@drawable/rounded_layout">
 
                 <LinearLayout

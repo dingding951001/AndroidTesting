@@ -203,7 +203,12 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         }
         setCurrentVote(view, data);
         JSONObject balanceData = data.getJSONObject("balance_card");
-        setCurrentBalance(view, balanceData);
+        if (balanceData.length() != 0) {
+            setCurrentBalance(view, balanceData);
+        } else {
+            LinearLayout currentBalanceLayout = view.findViewById(R.id.current_balance_layout);
+            currentBalanceLayout.setVisibility(View.GONE);
+        }
     }
 
     private void setCurrentTimeline(View view, JSONObject data) throws JSONException {
@@ -290,15 +295,19 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         setVoteCard(currentVoteCard, voteData);
 
         SliderLayout currentVoteBannerSlider = view.findViewById(R.id.current_vote_banner);
-        JSONArray bannerData = (JSONArray) voteData.get("banner");
-        for(int i=0; i< bannerData.length(); i++) {
-            JSONObject banner = bannerData.getJSONObject(i);
-            final String imageUrl = banner.get("img").toString();
-            TextSliderView textSliderView = new TextSliderView(getActivity());
-            textSliderView
-                    .image(imageUrl)
-                    .setScaleType(BaseSliderView.ScaleType.Fit);
-            currentVoteBannerSlider.addSlider(textSliderView);
+        if (voteData.has("banner")) {
+            JSONArray bannerData = (JSONArray) voteData.get("banner");
+            for (int i = 0; i < bannerData.length(); i++) {
+                JSONObject banner = bannerData.getJSONObject(i);
+                final String imageUrl = banner.get("img").toString();
+                TextSliderView textSliderView = new TextSliderView(getActivity());
+                textSliderView
+                        .image(imageUrl)
+                        .setScaleType(BaseSliderView.ScaleType.Fit);
+                currentVoteBannerSlider.addSlider(textSliderView);
+            }
+        } else {
+            currentVoteBannerSlider.setVisibility(View.GONE);
         }
     }
 
@@ -330,29 +339,37 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
 
     private void setVoteCard(View voteCardView, JSONObject voteData) throws JSONException {
         String title = voteData.getString("title");
-        int count = voteData.getInt("votes");
         TextView voteTitle = voteCardView.findViewById(R.id.vote_title);
         voteTitle.setText(title);
         TextView voteCount = voteCardView.findViewById(R.id.vote_count);
-        voteCount.setText(count + " Votes");
-
-        JSONArray winners = voteData.getJSONArray("winners");
         TableLayout winnerTableLayout = (TableLayout) voteCardView.findViewById(R.id.table_layout_winner_projects);
-        for (int i = 0; i < winners.length(); i++) {
-            JSONObject winner = (JSONObject) winners.get(i);
-            TableRow tableRow = new TableRow(getActivity());
-            View tableRowView = voteCardView.inflate(getActivity(), R.layout.tablerow_winner_project, tableRow);
+        if (voteData.getString("type").equals("vote")) {
+            voteCount.setText("Starting Soon");
+            winnerTableLayout.setVisibility(View.GONE);
+            View separator = voteCardView.findViewById(R.id.winner_voting_project_separator);
+            separator.setVisibility(View.GONE);
+        } else {
+            int count = voteData.getInt("votes");
+            voteCount.setText(count + " Votes");
 
-            ImageView winnerImg = tableRowView.findViewById(R.id.winner_img);
-            final String logoUrl = winner.getString("logo");
-            WebImageHandler.UNFINISHED_ASYNC_TASKS.put(logoUrl, new LoadImageFromURLTask(winnerImg, logoUrl).execute(logoUrl));
+            if (voteData.has("winners")) {
+                JSONArray winners = voteData.getJSONArray("winners");
+                for (int i = 0; i < winners.length(); i++) {
+                    JSONObject winner = (JSONObject) winners.get(i);
+                    TableRow tableRow = new TableRow(getActivity());
+                    View tableRowView = voteCardView.inflate(getActivity(), R.layout.tablerow_winner_project, tableRow);
 
-            TextView winnerTitle = tableRowView.findViewById(R.id.winner_title);
-            title = winner.getString("title");
-            winnerTitle.setText(title);
-            winnerTableLayout.addView(tableRowView);
+                    ImageView winnerImg = tableRowView.findViewById(R.id.winner_img);
+                    final String logoUrl = winner.getString("logo");
+                    WebImageHandler.UNFINISHED_ASYNC_TASKS.put(logoUrl, new LoadImageFromURLTask(winnerImg, logoUrl).execute(logoUrl));
+
+                    TextView winnerTitle = tableRowView.findViewById(R.id.winner_title);
+                    title = winner.getString("title");
+                    winnerTitle.setText(title);
+                    winnerTableLayout.addView(tableRowView);
+                }
+            }
         }
-
         JSONArray projects = voteData.getJSONArray("projects");
         TableLayout voteTableLayout = (TableLayout) voteCardView.findViewById(R.id.table_layout_vote_projects);
         for (int i = 0; i < projects.length(); i++) {

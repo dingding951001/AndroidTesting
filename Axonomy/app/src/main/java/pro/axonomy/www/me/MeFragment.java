@@ -1,5 +1,6 @@
 package pro.axonomy.www.me;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import pro.axonomy.www.GetHttpUrlRequestTask;
 import pro.axonomy.www.LoadImageFromURLTask;
 import pro.axonomy.www.R;
 import pro.axonomy.www.WebImageHandler;
+import pro.axonomy.www.kyc.KYCLanding;
 
 public class MeFragment extends Fragment {
 
@@ -44,8 +46,9 @@ public class MeFragment extends Fragment {
                     final JSONObject userMetadata = new JSONObject(result).getJSONObject("data");
                     LinearLayout toKycLayout = this.parentView.findViewById(R.id.to_kyc_layout);
                     int kycStatus = userMetadata.getInt("kyc");
-                    if (kycStatus == -1 || kycStatus == 2) {
+                    if (kycStatus == 0 || kycStatus == 1) {
                         toKycLayout.setVisibility(View.GONE);
+                        return;
                     }
 
                     String meImgUrl = userMetadata.getString("avatar");
@@ -62,6 +65,13 @@ public class MeFragment extends Fragment {
                     } else {
                         meSignature.setText(userMetadata.getString("desc"));
                     }
+
+                    toKycLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            goToKyc();
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -133,5 +143,10 @@ public class MeFragment extends Fragment {
         menuTask.execute(DBA_MENU_URL);
 
         return view;
+    }
+
+    public void goToKyc() {
+        Intent kycLandingIntent = new Intent(getContext(), KYCLanding.class);
+        startActivity(kycLandingIntent);
     }
 }

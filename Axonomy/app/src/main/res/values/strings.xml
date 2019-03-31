@@ -21,4 +21,6 @@
     <string name="title_project">PROJECT</string>
     <string name="title_updates">UPDATES</string>
     <string name="title_me">ME</string>
+    <string name="kyc_now_en">KYC NOW TO GET <font fgcolor='#FF4C74'>60 Axon</font></string>
+    <string name="kyc_now_cn">完成实名认证，获得 <font fgcolor='#FF4C74'>60 Axon</font></string>
 </resources>

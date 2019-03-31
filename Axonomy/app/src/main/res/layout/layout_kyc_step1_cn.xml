@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/back"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="实名认证"
+            android:textColor="#ff333333"
+            android:textSize="18sp"
+            android:gravity="center"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="1dp"
+        android:background="#E0DDEE"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="第一步"
+            android:textColor="#ff333333"
+            android:textSize="25sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="国家 *"
+            android:textColor="#ff333333"
+            android:textSize="18sp"
+            />
+        <EditText
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/rounded_layout"
+            android:hint="中国"
+            android:paddingLeft="15dp"
+            android:textColor="#ffa7a4b6"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="证件号码 *"
+            android:textColor="#ff333333"
+            android:textSize="18sp"
+            />
+        <EditText
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/rounded_layout"
+            android:hint="请输入证件号码"
+            android:paddingLeft="15dp"
+            android:textColor="#ffa7a4b6"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="姓名 *"
+            android:textColor="#ff333333"
+            android:textSize="18sp"
+            />
+        <EditText
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/rounded_layout"
+            android:hint="请输入姓名"
+            android:paddingLeft="15dp"
+            android:textColor="#ffa7a4b6"
+            android:textSize="15sp"
+            />
+
+        <Button
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/purple_round_button"
+            android:text="下一步"
+            android:textColor="#ffffffff"
+            android:textSize="17sp"
+            android:onClick="manualVerify2"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
