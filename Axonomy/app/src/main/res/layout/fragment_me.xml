@@ -299,7 +299,8 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:minHeight="50dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:id="@+id/meToSetting">
 
                     <ImageView
                         android:layout_width="20dp"

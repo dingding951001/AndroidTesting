@@ -12,6 +12,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +28,6 @@ import java.util.concurrent.ExecutionException;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
-import pro.axonomy.www.LoadImageFromURLTask;
 import pro.axonomy.www.PostHttpsRequestTask;
 import pro.axonomy.www.R;
 import pro.axonomy.www.WebImageHandler;
@@ -225,7 +226,8 @@ public class LoadProjectListDataTask extends AsyncTask<String, Void, Void> {
             rowDescription.setText(projectDescription);
             ImageView rowImage = (ImageView) tableRowView.findViewById(R.id.rowImage);
 
-            WebImageHandler.UNFINISHED_ASYNC_TASKS.put(projectLogoUrl, new LoadImageFromURLTask(rowImage, projectLogoUrl).execute(projectLogoUrl));
+            //WebImageHandler.UNFINISHED_ASYNC_TASKS.put(projectLogoUrl, new LoadImageFromURLTask(rowImage, projectLogoUrl).execute(projectLogoUrl));
+            Glide.with(this.context).load(projectLogoUrl).into(rowImage);
             tableLayout.addView(tableRowView);
 
         }

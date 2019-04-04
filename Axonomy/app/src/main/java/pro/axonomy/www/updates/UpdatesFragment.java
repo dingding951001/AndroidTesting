@@ -21,6 +21,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,9 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pro.axonomy.www.GetHttpUrlRequestTask;
-import pro.axonomy.www.LoadImageFromURLTask;
 import pro.axonomy.www.R;
-import pro.axonomy.www.WebImageHandler;
 import pro.axonomy.www.me.user.UserActivity;
 import pro.axonomy.www.utils.observableScrollView.ObservableScrollView;
 import pro.axonomy.www.utils.observableScrollView.ScrollViewListener;
@@ -135,7 +135,8 @@ public class UpdatesFragment extends Fragment implements ScrollViewListener {
                 updateAuthorImgUrl = project.getString("logo");
             }
             ImageView updateAuthorImg = updateView.findViewById(R.id.update_author_img);
-            WebImageHandler.UNFINISHED_ASYNC_TASKS.put(updateAuthorImgUrl, new LoadImageFromURLTask(updateAuthorImg, updateAuthorImgUrl).execute(updateAuthorImgUrl));
+            //WebImageHandler.UNFINISHED_ASYNC_TASKS.put(updateAuthorImgUrl, new LoadImageFromURLTask(updateAuthorImg, updateAuthorImgUrl).execute(updateAuthorImgUrl));
+            Glide.with(getContext()).load(updateAuthorImgUrl).into(updateAuthorImg);
 
             TextView updateTime = updateView.findViewById(R.id.update_time);
             updateTime.setText(item.getString("create_at_str"));

@@ -17,16 +17,17 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import pro.axonomy.www.GeneralPostHttpRequestTask;
 import pro.axonomy.www.GetHttpUrlRequestTask;
-import pro.axonomy.www.LoadImageFromURLTask;
 import pro.axonomy.www.R;
-import pro.axonomy.www.WebImageHandler;
 import pro.axonomy.www.kyc.KYCLanding;
+import pro.axonomy.www.me.setting.SettingActivity;
 
 public class MeFragment extends Fragment {
 
@@ -53,7 +54,8 @@ public class MeFragment extends Fragment {
 
                     String meImgUrl = userMetadata.getString("avatar");
                     ImageView meImg = this.parentView.findViewById(R.id.me_img);
-                    WebImageHandler.UNFINISHED_ASYNC_TASKS.put(meImgUrl, new LoadImageFromURLTask(meImg, meImgUrl).execute(meImgUrl));
+                    //WebImageHandler.UNFINISHED_ASYNC_TASKS.put(meImgUrl, new LoadImageFromURLTask(meImg, meImgUrl).execute(meImgUrl));
+                    Glide.with(getContext()).load(meImgUrl).into(meImg);
 
                     String userName = userMetadata.getString("username");
                     TextView meName = this.parentView.findViewById(R.id.me_name);
@@ -111,7 +113,8 @@ public class MeFragment extends Fragment {
                                     menuText = currentRow.findViewById(R.id.user_task_txt_0);
                                     menuText.setText(title);
                                     menuImg = currentRow.findViewById(R.id.user_task_img_0);
-                                    WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
+                                    //WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
+                                    Glide.with(getContext()).load(imageUrl).into(menuImg);
                                     separator = currentRow.findViewById(R.id.separator_0);
                                     separator.setBackgroundColor(Color.parseColor("#EFEFEF"));
                                     break;
@@ -119,7 +122,8 @@ public class MeFragment extends Fragment {
                                     menuText = currentRow.findViewById(R.id.user_task_txt_1);
                                     menuText.setText(title);
                                     menuImg = currentRow.findViewById(R.id.user_task_img_1);
-                                    WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
+                                    //WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
+                                    Glide.with(getContext()).load(imageUrl).into(menuImg);
                                     separator = currentRow.findViewById(R.id.separator_1);
                                     separator.setBackgroundColor(Color.parseColor("#EFEFEF"));
                                     break;
@@ -127,7 +131,8 @@ public class MeFragment extends Fragment {
                                     menuText = currentRow.findViewById(R.id.user_task_txt_2);
                                     menuText.setText(title);
                                     menuImg = currentRow.findViewById(R.id.user_task_img_2);
-                                    WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
+                                    //WebImageHandler.UNFINISHED_ASYNC_TASKS.put(imageUrl, new LoadImageFromURLTask(menuImg, imageUrl).execute(imageUrl));
+                                    Glide.with(getContext()).load(imageUrl).into(menuImg);
                             }
                         }
                         table.addView(currentRow);
@@ -141,6 +146,15 @@ public class MeFragment extends Fragment {
 
         userMetaTask.execute(USER_METADATA_URL);
         menuTask.execute(DBA_MENU_URL);
+
+        TableRow settingRow = view.findViewById(R.id.meToSetting);
+        settingRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingIntent = new Intent(getContext(), SettingActivity.class);
+                startActivity(settingIntent);
+            }
+        });
 
         return view;
     }

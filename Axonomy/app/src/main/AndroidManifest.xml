@@ -38,6 +38,9 @@
         <activity android:name=".me.user.UserActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
+        <activity android:name=".me.setting.SettingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity android:name=".kyc.KYCLanding"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>

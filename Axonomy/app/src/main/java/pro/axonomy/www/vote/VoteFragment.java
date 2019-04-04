@@ -1,7 +1,6 @@
 package pro.axonomy.www.vote;
 
 import android.annotation.SuppressLint;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +16,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
@@ -25,14 +25,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import pro.axonomy.www.GetHttpUrlRequestTask;
-import pro.axonomy.www.LoadImageFromURLTask;
 import pro.axonomy.www.R;
-import pro.axonomy.www.WebImageHandler;
 
 public class VoteFragment extends Fragment implements BaseSliderView.OnSliderClickListener {
 
@@ -42,7 +38,7 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     private static final String DATA = "data";
 
     private static View voteFragmentView = null;
-    private static Map<String, LoadImageFromURLTask> UNFINISHED_ASYNC_TASKS;
+    //private static Map<String, LoadImageFromURLTask> UNFINISHED_ASYNC_TASKS;
 
     private static boolean FIRST_LOAD = true;
 
@@ -78,12 +74,13 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
                 e.printStackTrace();
             }
             FIRST_LOAD = false;
-        } else if (UNFINISHED_ASYNC_TASKS != null) {
-            for (final Map.Entry<String, LoadImageFromURLTask> task : UNFINISHED_ASYNC_TASKS.entrySet()) {
-                Log.i("VoteFragReload", task.getKey());
-                task.getValue().execute(task.getKey());
-            }
         }
+//        else if (UNFINISHED_ASYNC_TASKS != null) {
+//            for (final Map.Entry<String, LoadImageFromURLTask> task : UNFINISHED_ASYNC_TASKS.entrySet()) {
+//                Log.i("VoteFragReload", task.getKey());
+//                task.getValue().execute(task.getKey());
+//            }
+//        }
     }
 
     /**
@@ -93,14 +90,15 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
     @Override
     public void onStop() {
         super.onStop();
+        Log.d("VoteFragment", "onStop");
         // Clone all AsyncTasks, the same task cannot be executed twice, each time start a new on with the same parameters
-        UNFINISHED_ASYNC_TASKS = new HashMap<String, LoadImageFromURLTask>() {{
-            for (final Entry<String, AsyncTask> task : WebImageHandler.UNFINISHED_ASYNC_TASKS.entrySet()) {
-                final LoadImageFromURLTask originalTask = (LoadImageFromURLTask) task.getValue();
-                put(task.getKey(), new LoadImageFromURLTask(originalTask.getImageView(), originalTask.getId()));
-            }
-        }};
-        WebImageHandler.clearUnfinishedAsyncTaskList();
+//        UNFINISHED_ASYNC_TASKS = new HashMap<String, LoadImageFromURLTask>() {{
+//            for (final Entry<String, AsyncTask> task : WebImageHandler.UNFINISHED_ASYNC_TASKS.entrySet()) {
+//                final LoadImageFromURLTask originalTask = (LoadImageFromURLTask) task.getValue();
+//                put(task.getKey(), new LoadImageFromURLTask(originalTask.getImageView(), originalTask.getId()));
+//            }
+//        }};
+//        WebImageHandler.clearUnfinishedAsyncTaskList();
     }
 
     @Override
@@ -361,7 +359,8 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
 
                     ImageView winnerImg = tableRowView.findViewById(R.id.winner_img);
                     final String logoUrl = winner.getString("logo");
-                    WebImageHandler.UNFINISHED_ASYNC_TASKS.put(logoUrl, new LoadImageFromURLTask(winnerImg, logoUrl).execute(logoUrl));
+                    //WebImageHandler.UNFINISHED_ASYNC_TASKS.put(logoUrl, new LoadImageFromURLTask(winnerImg, logoUrl).execute(logoUrl));
+                    Glide.with(getContext()).load(logoUrl).into(winnerImg);
 
                     TextView winnerTitle = tableRowView.findViewById(R.id.winner_title);
                     title = winner.getString("title");
@@ -379,7 +378,8 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
 
             ImageView projectImg = tableRowView.findViewById(R.id.vote_image);
             final String logoUrl = project.getString("logo");
-            WebImageHandler.UNFINISHED_ASYNC_TASKS.put(logoUrl, new LoadImageFromURLTask(projectImg, logoUrl).execute(logoUrl));
+            //WebImageHandler.UNFINISHED_ASYNC_TASKS.put(logoUrl, new LoadImageFromURLTask(projectImg, logoUrl).execute(logoUrl));
+            Glide.with(getContext()).load(logoUrl).into(projectImg);
 
             TextView index = tableRowView.findViewById(R.id.vote_index);
             index.setText(String.valueOf(i+1));

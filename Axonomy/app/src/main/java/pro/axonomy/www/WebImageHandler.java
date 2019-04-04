@@ -25,9 +25,9 @@ public class WebImageHandler {
         while (!UNFINISHED_ASYNC_TASKS.isEmpty()) {
             Iterator it = UNFINISHED_ASYNC_TASKS.entrySet().iterator();
             Map.Entry pair = (Map.Entry)it.next();
-            AsyncTask task = (AsyncTask) pair.getValue();
-            task.cancel(true);
+            ((AsyncTask)pair.getValue()).cancel(true);
             UNFINISHED_ASYNC_TASKS.remove(pair.getKey());
+            Log.i("ClearAsyncTask", String.valueOf(pair.getKey()));
         }
         Log.i("ClearAsyncTask", "Clearance finished.");
     }

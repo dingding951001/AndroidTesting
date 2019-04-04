@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import pro.axonomy.www.R;
-import pro.axonomy.www.WebImageHandler;
 
 public class ProjectFragment extends Fragment {
 
@@ -98,6 +97,6 @@ public class ProjectFragment extends Fragment {
     public void onStop() {
         super.onStop();
         JUMPED_OUT_FRAGMENT = true;
-        WebImageHandler.clearUnfinishedAsyncTaskList();
+        //WebImageHandler.clearUnfinishedAsyncTaskList();
     }
 }

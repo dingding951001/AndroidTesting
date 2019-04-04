@@ -31,19 +31,58 @@ public class LoadImageFromURLTask extends AsyncTask<String, Void, Bitmap> {
     protected Bitmap doInBackground(String... params) {
         Log.d("LoadImageTask", "doInBackground " + id);
         Bitmap result = null;
+
         try {
             Bitmap cache = WebImageHandler.WEB_IMAGE_MAP.get(params[0]);
             if (cache != null) {
                 result = cache;
                 Log.i("LoadImageTask", "Cache hit for URL: " + params[0]);
             } else {
+                if (isCancelled()) {
+                    Log.d("LoadImageTask", "isCancelled");
+                    return null;
+                }
                 URL url = new URL(params[0]);
+                if (isCancelled()) {
+                    Log.d("LoadImageTask", "isCancelled");
+                    return null;
+                }
                 URLConnection conn = url.openConnection();
+                if (isCancelled()) {
+                    Log.d("LoadImageTask", "isCancelled");
+                    return null;
+                }
                 conn.setUseCaches(true);
+                if (isCancelled()) {
+                    Log.d("LoadImageTask", "isCancelled");
+                    return null;
+                }
                 conn.setConnectTimeout(LOAD_IMAGE_TIME_OUT);
+                if (isCancelled()) {
+                    Log.d("LoadImageTask", "isCancelled");
+                    return null;
+                }
                 conn.setReadTimeout(LOAD_IMAGE_TIME_OUT);
+                if (isCancelled()) {
+                    Log.d("LoadImageTask", "isCancelled");
+                    return null;
+                }
+                while (conn.getContent() == null) {
+                    if (isCancelled()) {
+                        Log.d("LoadImageTask", "isCancelled");
+                        return null;
+                    }
+                }
                 if (conn.getContent() != null) {
+                    if (isCancelled()) {
+                        Log.d("LoadImageTask", "isCancelled");
+                        return null;
+                    }
                     result = BitmapFactory.decodeStream((InputStream) conn.getContent());
+                    if (isCancelled()) {
+                        Log.d("LoadImageTask", "isCancelled");
+                        return null;
+                    }
                     WebImageHandler.WEB_IMAGE_MAP.put(params[0], result);
                     Log.i("LoadImageTask", "SUCCEED in loading image from URL: " + params[0]);
                 } else {
