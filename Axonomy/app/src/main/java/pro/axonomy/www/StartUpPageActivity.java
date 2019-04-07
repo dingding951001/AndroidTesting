@@ -2,38 +2,27 @@ package pro.axonomy.www;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-
-import pro.axonomy.www.login.MobileLoginActivity;
 
 public class StartUpPageActivity extends Activity {
+
+    static final String TRANSLATION_URL = "https://wx.aceport.xyz/api/tag/i18ngen";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splashscreen);
-        Handler handler = new Handler();
 
-        if (UserInfo.getAuthorization(this).length() == 0) {
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    finish();
-                    Intent bottomNavigationActivity = new Intent(getBaseContext(), MobileLoginActivity.class);
-                    startActivity(bottomNavigationActivity);
-                }
-            }, 2000);
-        } else {
-            Log.i("StartUp", "Already logged in with token: " + UserInfo.getAuthorization(this));
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    finish();
-                    Intent bottomNavigationActivity = new Intent(getBaseContext(), BottomNavigationActivity.class);
-                    startActivity(bottomNavigationActivity);
-                }
-            }, 2000);
-        }
+        AsyncTask<String, String, String> TranslationTask = new GetHttpUrlRequestTask(getBaseContext()) {
+            @Override
+            protected void onPostExecute(String result) {
+                UserInfo.setTranslation(getBaseContext(), result);
+                Intent bottomNavigationActivity = new Intent(getBaseContext(), BottomNavigationActivity.class);
+                startActivity(bottomNavigationActivity);
+            }
+        };
+        TranslationTask.execute(TRANSLATION_URL);
     }
 
 }
