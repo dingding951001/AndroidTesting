@@ -13,10 +13,6 @@ import pro.axonomy.www.GeneralPostHttpRequestTask;
 import pro.axonomy.www.R;
 import pro.axonomy.www.WebViewActivity;
 
-/**
- * Created by xingyuanding on 3/30/19.
- */
-
 public class KYCSpeed extends AppCompatActivity {
 
     private static String GET_BIZ_TOKEN_URL = "https://wx.aceport.com/api/v1/faceid/get_biz_token";

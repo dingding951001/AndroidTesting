@@ -188,17 +188,25 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         round.setText("ROUND " + sequence);
 
         setCurrentTimeline(view, data);
+
         setCurrentActivity(view, data);
+
         JSONObject revenueData = data.getJSONObject("revenue_card");
-        if (revenueData.getString("type").equals("text")) {
-            LinearLayout currentRevenueCard = view.findViewById(R.id.current_revenue_card);
+        LinearLayout currentRevenueCard = view.findViewById(R.id.current_revenue_card);
+        LinearLayout currentRevenueTextCard = view.findViewById(R.id.current_revenue_text_card);
+        if (revenueData.length() == 0) {
             currentRevenueCard.setVisibility(View.GONE);
-            setCurrentRevenueText(view, revenueData);
-        } else {
-            LinearLayout currentRevenueTextCard = view.findViewById(R.id.current_revenue_text_card);
             currentRevenueTextCard.setVisibility(View.GONE);
-            setCurrentRevenue(view, revenueData);
+        } else {
+            if (revenueData.getString("type").equals("text")) {
+                currentRevenueCard.setVisibility(View.GONE);
+                setCurrentRevenueText(view, revenueData);
+            } else {
+                currentRevenueTextCard.setVisibility(View.GONE);
+                setCurrentRevenue(view, revenueData);
+            }
         }
+
         setCurrentVote(view, data);
         JSONObject balanceData = data.getJSONObject("balance_card");
         if (balanceData.length() != 0) {
@@ -241,9 +249,13 @@ public class VoteFragment extends Fragment implements BaseSliderView.OnSliderCli
         TextView activityTitle = view.findViewById(R.id.current_activity_title);
         activityTitle.setText(activityData.getString("title"));
         TextView activityLabel = view.findViewById(R.id.current_activity_label);
-        JSONArray labels = activityData.getJSONArray("labels");
-        for (int i = 0; i < labels.length(); i++) {
-            activityLabel.setText(labels.getJSONObject(i).getString("text"));
+        if (activityData.has("labels")) {
+            JSONArray labels = activityData.getJSONArray("labels");
+            for (int i = 0; i < labels.length(); i++) {
+                activityLabel.setText(labels.getJSONObject(i).getString("text"));
+            }
+        } else {
+            activityLabel.setVisibility(View.GONE);
         }
         JSONArray activityItems = activityData.getJSONArray("items");
         for (int i = 0; i < activityItems.length(); i++) {

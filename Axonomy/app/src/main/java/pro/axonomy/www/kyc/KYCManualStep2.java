@@ -5,10 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import pro.axonomy.www.R;
 
-/**
- * Created by xingyuanding on 3/30/19.
- */
-
 public class KYCManualStep2 extends AppCompatActivity {
 
     @Override

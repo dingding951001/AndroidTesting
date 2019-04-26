@@ -9,10 +9,6 @@ import pro.axonomy.www.R;
 import pro.axonomy.www.UserInfo;
 import pro.axonomy.www.login.MobileLoginActivity;
 
-/**
- * Created by xingyuanding on 4/4/19.
- */
-
 public class SettingActivity extends AppCompatActivity {
 
     @Override

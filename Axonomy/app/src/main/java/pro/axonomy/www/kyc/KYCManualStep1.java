@@ -7,10 +7,6 @@ import android.view.View;
 
 import pro.axonomy.www.R;
 
-/**
- * Created by xingyuanding on 3/30/19.
- */
-
 public class KYCManualStep1 extends AppCompatActivity {
 
     @Override

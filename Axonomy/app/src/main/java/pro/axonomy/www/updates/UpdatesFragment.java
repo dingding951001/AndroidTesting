@@ -36,14 +36,11 @@ import pro.axonomy.www.me.user.UserActivity;
 import pro.axonomy.www.utils.observableScrollView.ObservableScrollView;
 import pro.axonomy.www.utils.observableScrollView.ScrollViewListener;
 
-/**
- * Created by xingyuanding on 3/2/19.
- */
-
 public class UpdatesFragment extends Fragment implements ScrollViewListener {
 
     private int updateCount;
     private int page;
+    private boolean allowRetrieval;
     private ObservableScrollView scrollView;
     private static final int pageSize = 10;
     private static final String TREND_URL = "https://wx.aceport.com/api/v1/trends?page=%d&page_size=%d&sticked=%d";
@@ -56,6 +53,7 @@ public class UpdatesFragment extends Fragment implements ScrollViewListener {
         scrollView.setScrollViewListener(this);
 
         page = 0;
+        allowRetrieval = true;
 
         final String stickedUrl = String.format(TREND_URL, page, pageSize, 1);
         final String nonStickedUrl = String.format(TREND_URL, page, pageSize, 0);
@@ -219,6 +217,10 @@ public class UpdatesFragment extends Fragment implements ScrollViewListener {
     @Override
     public void onScrollEnded(final ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
         Log.d("onScrollEnded", "onScrollEnded");
+        if (!allowRetrieval) {
+            return;
+        }
+        allowRetrieval = false;
         page += 1;
         int numItems = page * pageSize;
         final ProgressBar bottomProgressBar = scrollView.getRootView().findViewById(R.id.progress_bar_bottom);
@@ -238,6 +240,7 @@ public class UpdatesFragment extends Fragment implements ScrollViewListener {
                     try {
                         final JSONObject nonstickedData = new JSONObject(result);
                         populateNonStickedView(scrollView, nonstickedData);
+                        allowRetrieval = true;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

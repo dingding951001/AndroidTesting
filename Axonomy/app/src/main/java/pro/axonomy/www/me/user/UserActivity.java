@@ -5,10 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import pro.axonomy.www.R;
 
-/**
- * Created by xingyuanding on 3/16/19.
- */
-
 public class UserActivity extends AppCompatActivity {
 
     @Override

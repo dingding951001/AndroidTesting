@@ -9,10 +9,6 @@ import android.widget.ImageView;
 import pro.axonomy.www.R;
 import pro.axonomy.www.UserInfo;
 
-/**
- * Created by xingyuanding on 4/7/19.
- */
-
 public class LanguageActivity extends Activity {
 
     @Override
